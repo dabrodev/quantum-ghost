@@ -7,14 +7,12 @@ public class Enemy : MonoBehaviour
     private float _speed = 4.0f;
     private float _randomPosX;
     
-    // Start is called before the first frame update
     void Start()
     {
         RandomPos();
         transform.position = new Vector3(_randomPosX, 8.0f, 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -23,15 +21,11 @@ public class Enemy : MonoBehaviour
         {
             RandomPos();
             transform.position = new Vector3(_randomPosX, 8.0f, 0);
-
         }
-
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-  
-
         if (other.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
@@ -44,14 +38,12 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-
         if (other.tag == "Laser")
         {
             Destroy(other.gameObject);
             Destroy(this.gameObject);
         }
     }
-
 
     void RandomPos()
     {

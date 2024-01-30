@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Laser
+  - Foreground
+  - Background
   layers:
   - Default
   - TransparentFX
@@ -42,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3819433241
+    locked: 0
+  - name: Foreground
+    uniqueID: 2936838321
     locked: 0
