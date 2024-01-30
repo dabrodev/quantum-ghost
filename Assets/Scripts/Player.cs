@@ -13,59 +13,36 @@ public class Player : MonoBehaviour
     private float _nextFire = 0.0f;
     [SerializeField]
     private int _lives = 3;
+
     public GameObject laserPrefab;
 
     private SpawnManager _spawnManager;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         PlayerMovement();
 
         if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire)
         {
-
             FireLaser();
         }
-
     }
-
 
     void PlayerMovement()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
-        // transform.Translate(Vector3.right * horizontalMovement * _speed * Time.deltaTime );
-        // transform.Translate(Vector3.up * verticalMovement * _speed * Time.deltaTime);
-
-        // transform.Translate(new Vector3(horizontalMovement, verticalMovement, 0) * _speed * Time.deltaTime);
-
         Vector3 direction = new Vector3(horizontalMovement, verticalMovement, 0);
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        /*
-        if (transform.position.y > 6.0f)
-        {
-            transform.position = new Vector3(transform.position.x, 6.0f, 0);
-        }
-        else if (transform.position.y < -4.0f)
-        {
-            transform.position = new Vector3(transform.position.x, -4.0f, 0);
-        }
-        */
-
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.0f, 6.0f), 0);
-
-        // Teleportation
 
         if (transform.position.x > 9.4f)
         {
@@ -77,8 +54,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FireLaser() {
-
+    void FireLaser()
+    {
         _nextFire = Time.time + _fireRate;
         Instantiate(laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
     }
@@ -90,9 +67,6 @@ public class Player : MonoBehaviour
 
         if (_lives < 1)
         {
-            //Communicate with Spawn Manager
-            //Let them know to stop spawning
-
             if (_spawnManager == null)
             {
                 Debug.LogError("The Spawn Manager is NULL!");
@@ -101,7 +75,6 @@ public class Player : MonoBehaviour
             {
                 _spawnManager.onPlayerDeath();
             }
-
             Destroy(this.gameObject);
         }
     }
