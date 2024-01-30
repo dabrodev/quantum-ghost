@@ -14,7 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
 
-    public GameObject laserPrefab;
+    [SerializeField]
+    private GameObject _laserPrefab;
 
     private SpawnManager _spawnManager;
 
@@ -57,7 +58,7 @@ public class Player : MonoBehaviour
     void FireLaser()
     {
         _nextFire = Time.time + _fireRate;
-        Instantiate(laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
+        Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
     }
 
     public void Damage()

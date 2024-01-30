@@ -397,7 +397,7 @@ MonoBehaviour:
   _laserOffset: 0.8
   _fireRate: 0.5
   _lives: 3
-  laserPrefab: {fileID: 2433780369211541801, guid: d29b1f4ed89e641fe99a851cef94ddc0,
+  _laserPrefab: {fileID: 2433780369211541801, guid: d29b1f4ed89e641fe99a851cef94ddc0,
     type: 3}
 --- !u!212 &1639322324
 SpriteRenderer:
