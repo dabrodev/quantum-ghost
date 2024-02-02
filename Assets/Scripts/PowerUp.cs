@@ -23,11 +23,15 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.transform.tag == "Player")
+        if (other.tag == "Player")
         {
             Destroy(this.gameObject);
+
+            Player player = other.transform.GetComponent<Player>();
+
+            player.TripleShotActive();
         }
     }
 }
