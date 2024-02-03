@@ -6,13 +6,9 @@ public class PowerUp : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private int _powerupID; //0 = Triple Shot 1 = Speed 2 = Shields
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -31,7 +27,22 @@ public class PowerUp : MonoBehaviour
 
             Player player = other.transform.GetComponent<Player>();
 
-            player.TripleShotActive();
+            switch(_powerupID)
+            {
+                case 0:
+                    player.TripleShotActive();
+                    break;
+                case 1:
+                    player.SpeedActive();
+                    break;
+                case 2:
+                    // player.ShieldsActive();
+                    break;
+                default:
+                    Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
+                    break;
+            }
+
         }
     }
 }

@@ -42,7 +42,7 @@ public class SpawnManager : MonoBehaviour
             Vector3 randomPos = new Vector3(Random.Range(-9.0f, 9.0f), 8.0f, 0);
             GameObject newPowerup = Instantiate(_powerupPrefab, randomPos, Quaternion.identity);
            
-            yield return new WaitForSeconds(randomTime);
+            yield return new WaitForSeconds(10.0f);
         }
 
     }
