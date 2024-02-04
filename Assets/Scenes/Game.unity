@@ -287,6 +287,7 @@ MonoBehaviour:
   _powerups:
   - {fileID: 1974168030254007191, guid: 6dcb629cf3bde4cde9e6ba6fd1964069, type: 3}
   - {fileID: 5382996578121944069, guid: c5ad7f834763e455aabc5b0ab11161ab, type: 3}
+  - {fileID: 8376075809378491843, guid: 909dcafdcfa234c888106fcd253d9de5, type: 3}
 --- !u!4 &1358050589
 Transform:
   m_ObjectHideFlags: 0
@@ -426,6 +427,7 @@ MonoBehaviour:
     type: 3}
   _isTripleShotActive: 0
   _isSpeedActive: 0
+  _isShieldActive: 0
 --- !u!212 &1639322324
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -484,7 +486,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639322322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.37, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
