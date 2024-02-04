@@ -6,12 +6,6 @@ public class Enemy : MonoBehaviour
 {
     private float _speed = 4.0f;
     private float _randomPosX;
-    
-    void Start()
-    {
-        RandomPos();
-        transform.position = new Vector3(_randomPosX, 8.0f, 0);
-    }
 
     void Update()
     {
