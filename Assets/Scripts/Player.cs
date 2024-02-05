@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -25,13 +26,17 @@ public class Player : MonoBehaviour
     private bool _isSpeedActive = false;
     [SerializeField]
     private bool _isShieldActive = false;
+    [SerializeField]
+    private int _score = 0;
 
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -55,13 +60,11 @@ public class Player : MonoBehaviour
         if (_isSpeedActive == false)
         {
             transform.Translate(direction * _speed * Time.deltaTime);
-
         }
         else
         {
             transform.Translate(direction * _speed * _speedMultiplier * Time.deltaTime);
         }
-
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.0f, 6.0f), 0);
 
@@ -86,9 +89,7 @@ public class Player : MonoBehaviour
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
-
         }
-
     }
 
     public void Damage()
@@ -96,6 +97,8 @@ public class Player : MonoBehaviour
         if (_isShieldActive != true)
         {
             _lives--;
+
+            _uiManager.UpdateLives(_lives);
         }
         else
         {
@@ -113,6 +116,7 @@ public class Player : MonoBehaviour
                 _spawnManager.onPlayerDeath();
             }
             Destroy(this.gameObject);
+            _uiManager.GameOverShow();
         }
     }
 
@@ -154,10 +158,18 @@ public class Player : MonoBehaviour
 
     IEnumerator ShieldPowerDownCoroutine()
     {
-
         yield return new WaitForSeconds(5);
         this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         _isShieldActive = false;
     }
 
+    public void AddScore(int points)
+    {
+        _score += points;
+
+        if (_uiManager != null)
+        {
+            _uiManager.UpdateScore(_score);
+        }
+    }
 }

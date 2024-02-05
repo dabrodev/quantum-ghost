@@ -6,6 +6,14 @@ public class Enemy : MonoBehaviour
 {
     private float _speed = 4.0f;
     private float _randomPosX;
+    private Player _player;
+
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
 
     void Update()
     {
@@ -36,6 +44,12 @@ public class Enemy : MonoBehaviour
         {
             Destroy(other.gameObject);
             Destroy(this.gameObject);
+
+
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
         }
     }
 
