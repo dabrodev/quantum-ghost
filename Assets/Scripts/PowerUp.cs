@@ -36,7 +36,7 @@ public class PowerUp : MonoBehaviour
                     player.SpeedActive();
                     break;
                 case 2:
-                    // player.ShieldsActive();
+                    player.ShieldActive();
                     break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);

@@ -93,11 +93,14 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (_isShieldActive == false)
+        if (_isShieldActive != true)
         {
             _lives--;
         }
-
+        else
+        {
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
 
         if (_lives < 1)
         {
@@ -128,7 +131,9 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
+        Debug.Log("Shield activated");
         _isShieldActive = true;
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         StartCoroutine(ShieldPowerDownCoroutine());
         
     }
@@ -149,7 +154,9 @@ public class Player : MonoBehaviour
 
     IEnumerator ShieldPowerDownCoroutine()
     {
+
         yield return new WaitForSeconds(5);
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         _isShieldActive = false;
     }
 
