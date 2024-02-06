@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -138,10 +137,8 @@ public class Player : MonoBehaviour
         Debug.Log("Shield activated");
         _isShieldActive = true;
         this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(ShieldPowerDownCoroutine());
-        
+        StartCoroutine(ShieldPowerDownCoroutine());        
     }
-
 
     IEnumerator TripleShotPowerDownRoutune()
     {
@@ -154,7 +151,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
         _isSpeedActive = false;
     }
-
 
     IEnumerator ShieldPowerDownCoroutine()
     {
