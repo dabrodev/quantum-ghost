@@ -67,13 +67,13 @@ public class Player : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.0f, 6.0f), 0);
 
-        if (transform.position.x > 9.4f)
+        if (transform.position.x > 10.4f)
         {
-            transform.position = new Vector3(-9.4f, transform.position.y, 0);
+            transform.position = new Vector3(-10.4f, transform.position.y, 0);
         }
-        else if (transform.position.x < -9.4f)
+        else if (transform.position.x < -10.4f)
         {
-            transform.position = new Vector3(9.4f, transform.position.y, 0);
+            transform.position = new Vector3(10.4f, transform.position.y, 0);
         }
     }
 
