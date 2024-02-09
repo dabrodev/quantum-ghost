@@ -30,12 +30,14 @@ public class Player : MonoBehaviour
 
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
+    private GameManager _gameManager;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -54,7 +56,6 @@ public class Player : MonoBehaviour
         float verticalMovement = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizontalMovement, verticalMovement, 0);
-
 
         if (_isSpeedActive == false)
         {
@@ -113,9 +114,11 @@ public class Player : MonoBehaviour
             else
             {
                 _spawnManager.onPlayerDeath();
+
             }
             Destroy(this.gameObject);
             _uiManager.GameOverShow();
+            _gameManager.GameOver();
         }
     }
 

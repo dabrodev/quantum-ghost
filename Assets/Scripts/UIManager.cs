@@ -26,7 +26,8 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "Score: " + 0;
-        
+        _gameOverText.gameObject.SetActive(false);
+
     }
 
     public void UpdateScore(int playerScore)
@@ -34,9 +35,9 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + playerScore.ToString();
     }
 
-    public void UpdateLives(int livesIndex)
+    public void UpdateLives(int currentLives)
     {
-        _livesImg.sprite = _liveSprites[livesIndex];
+        _livesImg.sprite = _liveSprites[currentLives];
     }
 
     public void GameOverShow() {
@@ -49,7 +50,7 @@ public class UIManager : MonoBehaviour
     {
         while(true)
         {
-
+            
             if (_display)
             {
                 _gameOverText.gameObject.SetActive(true);
@@ -63,7 +64,15 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
 
             _display = !_display;
-           
+
+
+            /*
+            _gameOverText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(0.2f);
+
+            _gameOverText.gameObject.SetActive(false);
+            */
 
         }
 
