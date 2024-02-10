@@ -11,7 +11,6 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups;
-    private bool _isDead = false;
 
     private bool _stopSpawning = false;
 
@@ -21,14 +20,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerupRoutine());
     }
 
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R) && _isDead)
-        {
-            RestartLevel();
-        }
-    }
 
     private IEnumerator SpawnEnemyRoutine()
     {
@@ -56,11 +47,5 @@ public class SpawnManager : MonoBehaviour
     public void onPlayerDeath()
     {
         _stopSpawning = true;
-        _isDead = true;
-    }
-
-    private void RestartLevel()
-    {
-        SceneManager.LoadScene("Game");
     }
 }

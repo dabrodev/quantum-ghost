@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     private void RestartLevel()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene(1);
     }
 
 }
