@@ -28,6 +28,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score = 0;
 
+    [SerializeField]
+    private GameObject _leftEngineFire, _rightEngineFire;
+
+
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameManager _gameManager;
@@ -119,6 +123,15 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
             _uiManager.GameOverShow();
             _gameManager.GameOver();
+        }
+
+        if (_lives == 2)
+        {
+            _rightEngineFire.SetActive(true);
+        }
+        else if (_lives == 1)
+        {
+            _leftEngineFire.SetActive(true);
         }
     }
 
