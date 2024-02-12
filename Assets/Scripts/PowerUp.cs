@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
+  
     [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
     private int _powerupID; //0 = Triple Shot 1 = Speed 2 = Shields
+
+    // [SerializeField] 
+    // private AudioClip _clip; // Alternative solution
+
+    private AudioSource _audioSource;
+
+
+    private void Start()
+    {
+        _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -23,9 +35,13 @@ public class PowerUp : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Destroy(this.gameObject);
 
+            // AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f); // Alternative solution
+            _audioSource.Play();
+            Destroy(this.gameObject);
             Player player = other.transform.GetComponent<Player>();
+
+
 
             switch(_powerupID)
             {
