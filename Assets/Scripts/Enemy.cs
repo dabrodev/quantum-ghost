@@ -8,10 +8,16 @@ public class Enemy : MonoBehaviour
     private float _randomPosX;
     private Player _player;
     private Animator _anim;
+    private float _fireRate;
+    private float _nextFire = 0;
+
+    [SerializeField]
+    private GameObject _enemyLaserPrefab;
 
     [SerializeField]
     private AudioClip _explosionSoundClip;
     private AudioSource _audioSource;
+    
 
     private void Start()
     {
@@ -31,12 +37,22 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The Animator is NULL");
         }
-
     }
 
 
     void Update()
     {
+        EnemyMovement();
+
+        if (Time.time > _nextFire)
+        {
+            FireEnemyLaser();
+        }
+
+    }
+
+    void EnemyMovement() {
+
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
         if (transform.position.y < -6.0f)
@@ -45,6 +61,25 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(_randomPosX, 8.0f, 0);
         }
     }
+
+
+    void FireEnemyLaser()
+    {
+        _fireRate = Random.Range(3f, 7f);
+        _nextFire = Time.time + _fireRate;
+        
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position, Quaternion.identity);
+        Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            lasers[i].SetEnemyLaser();
+        }
+
+
+    }
+
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -89,4 +124,5 @@ public class Enemy : MonoBehaviour
     {
         _randomPosX = Random.Range(-9.0f, 9.0f);
     }
+
 }
