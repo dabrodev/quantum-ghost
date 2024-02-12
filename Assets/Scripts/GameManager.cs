@@ -8,13 +8,6 @@ public class GameManager : MonoBehaviour
 
     private bool _isDead = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) && _isDead)
@@ -42,5 +35,4 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-
 }

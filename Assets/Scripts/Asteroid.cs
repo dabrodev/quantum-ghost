@@ -10,17 +10,13 @@ public class Asteroid : MonoBehaviour
     private GameObject _explosionPrefab;
     private SpawnManager _spawnManager;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         transform.Rotate(Vector3.forward * 6.0f * _rotationsPerMinute * Time.deltaTime);
     }
 
@@ -34,8 +30,6 @@ public class Asteroid : MonoBehaviour
             Destroy(other.gameObject);
             _spawnManager.StartSpawning();
             Destroy(this.gameObject, 0.25f);
-
-           
         }    
     }
 }

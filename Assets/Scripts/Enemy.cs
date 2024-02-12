@@ -31,6 +31,10 @@ public class Enemy : MonoBehaviour
             Debug.LogError("The Player is NULL");
         }
 
+        if (_audioSource == null) {
+            Debug.LogError("The Audio Source is NULL");
+        }
+
         _anim = GetComponent<Animator>();
 
         if (_anim == null)
@@ -38,7 +42,6 @@ public class Enemy : MonoBehaviour
             Debug.LogError("The Animator is NULL");
         }
     }
-
 
     void Update()
     {
@@ -48,7 +51,6 @@ public class Enemy : MonoBehaviour
         {
             FireEnemyLaser();
         }
-
     }
 
     void EnemyMovement() {
@@ -62,7 +64,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-
     void FireEnemyLaser()
     {
         _fireRate = Random.Range(3f, 7f);
@@ -75,11 +76,7 @@ public class Enemy : MonoBehaviour
         {
             lasers[i].SetEnemyLaser();
         }
-
-
     }
-
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -99,12 +96,8 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject, 2.0f);
         }
 
-
-        
-
         if (other.tag == "Laser")
         {
-
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _speed = 0;
@@ -124,5 +117,4 @@ public class Enemy : MonoBehaviour
     {
         _randomPosX = Random.Range(-9.0f, 9.0f);
     }
-
 }

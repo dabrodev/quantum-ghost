@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-  
     [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
@@ -35,13 +34,10 @@ public class PowerUp : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-
             // AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f); // Alternative solution
             _audioSource.Play();
             Destroy(this.gameObject);
             Player player = other.transform.GetComponent<Player>();
-
-
 
             switch(_powerupID)
             {
@@ -58,7 +54,6 @@ public class PowerUp : MonoBehaviour
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
                     break;
             }
-
         }
     }
 }

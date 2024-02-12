@@ -10,7 +10,6 @@ public class Laser : MonoBehaviour
 
     void Update()
     {
-
         if (_isEnemyLaser == false)
         {
             MoveUp();
@@ -19,7 +18,6 @@ public class Laser : MonoBehaviour
         {
             MoveDown();
         }
-
     }
 
     void MoveUp()
@@ -36,7 +34,6 @@ public class Laser : MonoBehaviour
             {
                 Destroy(this.gameObject);
             }
-
         }
     }
 

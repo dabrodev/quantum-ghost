@@ -49,10 +49,20 @@ public class Player : MonoBehaviour
 
         _audioSource = GetComponent<AudioSource>();
 
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL.");
+        }
+      
+        if (_uiManager == null)
+        {
+            Debug.LogError("UI Manager is NULL.");
+        }
 
-        // add NULL check for _spawnManager
-        // add NULL check for _uiManager
-
+        if (_gameManager == null)
+        {
+            Debug.LogError("Game Manager is NULL.");
+        }
 
         if (_audioSource == null)
         {
@@ -62,7 +72,6 @@ public class Player : MonoBehaviour
         {
             _audioSource.clip = _laserSoundClip;
         }
-
     }
 
     void Update()
@@ -101,7 +110,6 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(10.4f, transform.position.y, 0);
         }
-
     }
 
     void FireLaser()
@@ -117,10 +125,7 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
         }
 
-       
         _audioSource.Play();
-      
-
     }
 
     public void Damage()
@@ -145,7 +150,6 @@ public class Player : MonoBehaviour
             else
             {
                 _spawnManager.onPlayerDeath();
-
             }
             Destroy(this.gameObject);
             _uiManager.GameOverShow();
