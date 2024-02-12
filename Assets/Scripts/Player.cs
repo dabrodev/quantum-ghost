@@ -25,13 +25,53 @@ public class Player : MonoBehaviour
     private bool _isSpeedActive = false;
     [SerializeField]
     private bool _isShieldActive = false;
+    [SerializeField]
+    private int _score = 0;
+
+    [SerializeField]
+    private GameObject _leftEngineFire, _rightEngineFire;
+
+    [SerializeField]
+    private AudioClip _laserSoundClip;
+    private AudioSource _audioSource;
+
 
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
+    private GameManager _gameManager;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        _audioSource = GetComponent<AudioSource>();
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL.");
+        }
+      
+        if (_uiManager == null)
+        {
+            Debug.LogError("UI Manager is NULL.");
+        }
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("Game Manager is NULL.");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("Audio Source on the player is NULL.");
+        }
+        else
+        {
+            _audioSource.clip = _laserSoundClip;
+        }
     }
 
     void Update()
@@ -51,27 +91,24 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalMovement, verticalMovement, 0);
 
-
         if (_isSpeedActive == false)
         {
             transform.Translate(direction * _speed * Time.deltaTime);
-
         }
         else
         {
             transform.Translate(direction * _speed * _speedMultiplier * Time.deltaTime);
         }
 
-
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.0f, 6.0f), 0);
 
-        if (transform.position.x > 9.4f)
+        if (transform.position.x > 10.4f)
         {
-            transform.position = new Vector3(-9.4f, transform.position.y, 0);
+            transform.position = new Vector3(-10.4f, transform.position.y, 0);
         }
-        else if (transform.position.x < -9.4f)
+        else if (transform.position.x < -10.4f)
         {
-            transform.position = new Vector3(9.4f, transform.position.y, 0);
+            transform.position = new Vector3(10.4f, transform.position.y, 0);
         }
     }
 
@@ -86,18 +123,23 @@ public class Player : MonoBehaviour
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
-
         }
 
+        _audioSource.Play();
     }
 
     public void Damage()
     {
-        if (_isShieldActive == false)
+        if (_isShieldActive != true)
         {
             _lives--;
-        }
 
+            _uiManager.UpdateLives(_lives);
+        }
+        else
+        {
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
 
         if (_lives < 1)
         {
@@ -110,6 +152,17 @@ public class Player : MonoBehaviour
                 _spawnManager.onPlayerDeath();
             }
             Destroy(this.gameObject);
+            _uiManager.GameOverShow();
+            _gameManager.GameOver();
+        }
+
+        if (_lives == 2)
+        {
+            _rightEngineFire.SetActive(true);
+        }
+        else if (_lives == 1)
+        {
+            _leftEngineFire.SetActive(true);
         }
     }
 
@@ -128,11 +181,11 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
+        Debug.Log("Shield activated");
         _isShieldActive = true;
-        StartCoroutine(ShieldPowerDownCoroutine());
-        
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        StartCoroutine(ShieldPowerDownCoroutine());        
     }
-
 
     IEnumerator TripleShotPowerDownRoutune()
     {
@@ -146,11 +199,20 @@ public class Player : MonoBehaviour
         _isSpeedActive = false;
     }
 
-
     IEnumerator ShieldPowerDownCoroutine()
     {
         yield return new WaitForSeconds(5);
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         _isShieldActive = false;
     }
 
+    public void AddScore(int points)
+    {
+        _score += points;
+
+        if (_uiManager != null)
+        {
+            _uiManager.UpdateScore(_score);
+        }
+    }
 }
