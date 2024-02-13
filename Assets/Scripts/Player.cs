@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameManager _gameManager;
+    [SerializeField]
+    private int _shieldVolume;
 
     void Start()
     {
@@ -81,6 +83,16 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire)
         {
             FireLaser();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _speed *= 2;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _speed /= 2;
         }
     }
 
@@ -138,7 +150,14 @@ public class Player : MonoBehaviour
         }
         else
         {
-            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            _shieldVolume--;
+            _uiManager.DecreaseShieldStrength();
+
+            if (_shieldVolume == 0)
+            {
+                this.gameObject.transform.GetChild(0).gameObject.SetActive(false); // deactivating shield
+                _isShieldActive = false;
+            }
         }
 
         if (_lives < 1)
@@ -166,6 +185,7 @@ public class Player : MonoBehaviour
         }
     }
 
+
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
@@ -183,8 +203,9 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Shield activated");
         _isShieldActive = true;
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(ShieldPowerDownCoroutine());        
+        _shieldVolume = 3;
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(true); // activating Shield 
+       // StartCoroutine(ShieldPowerDownCoroutine());        
     }
 
     IEnumerator TripleShotPowerDownRoutune()

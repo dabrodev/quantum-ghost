@@ -17,11 +17,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _resetText;
     private bool _display = false;
+    [SerializeField]
+    private Scrollbar _shieldStrength;
     
+
+
+
     void Start()
     {
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
+
+        
     }
 
     public void UpdateScore(int playerScore)
@@ -39,6 +46,28 @@ public class UIManager : MonoBehaviour
         StartCoroutine(GameOverFlickerCoroutine());
         _resetText.gameObject.SetActive(true);
     }
+
+
+    public void ShowShieldStrength()
+    {
+        _shieldStrength.gameObject.SetActive(true);
+        _shieldStrength.size = 1f;
+    }
+
+    public void DecreaseShieldStrength()
+    {
+
+        Debug.Log("Decrease Shield called");
+
+        _shieldStrength.size -= 0.33f;
+
+        if (_shieldStrength.size < 0.1f)
+        {
+            _shieldStrength.gameObject.SetActive(false);
+        }
+
+    }
+
 
     IEnumerator GameOverFlickerCoroutine()
     {
