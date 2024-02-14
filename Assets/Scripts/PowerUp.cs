@@ -15,12 +15,10 @@ public class PowerUp : MonoBehaviour
     private AudioSource _audioSource;
     private UIManager _uiManager;
 
-
     private void Start()
     {
         _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        
     }
 
     void Update()

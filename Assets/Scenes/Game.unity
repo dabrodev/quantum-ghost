@@ -1019,11 +1019,11 @@ GameObject:
   - component: {fileID: 1221178197}
   m_Layer: 0
   m_Name: ShieldPlayer
-  m_TagString: Shield
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1221178194
 Transform:
   m_ObjectHideFlags: 0
@@ -1157,12 +1157,12 @@ GameObject:
   - component: {fileID: 1258868044}
   - component: {fileID: 1258868043}
   m_Layer: 5
-  m_Name: ShieldStrength_slider
+  m_Name: ShieldStrength_scrollbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1258868043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1206,7 +1206,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1672690211}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.28
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23344605, g: 0.4896062, b: 0.8113208, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1747,6 +1747,7 @@ MonoBehaviour:
   _leftEngineFire: {fileID: 319278090}
   _rightEngineFire: {fileID: 473824654}
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _shieldVolume: 3
 --- !u!212 &1639322324
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2048,7 +2049,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.28, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2073,7 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.022803964, g: 0.004672482, b: 0.028301895, a: 1}
+  m_Color: {r: 0.17986828, g: 0.28250372, b: 0.8867924, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
