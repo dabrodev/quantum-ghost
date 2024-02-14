@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _nextFire = 0.0f;
     [SerializeField]
+    private int _ammoCount = 15;
+    [SerializeField]
     private int _lives = 3;
 
     [SerializeField]
@@ -80,7 +82,7 @@ public class Player : MonoBehaviour
     {
         PlayerMovement();
 
-        if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire)
+        if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire && _ammoCount > 0)
         {
             FireLaser();
         }
@@ -136,6 +138,14 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
         }
+
+        if (_ammoCount > 0)
+        {
+            _ammoCount--;
+        }
+
+        _uiManager.UpdateAmmo(_ammoCount);
+
 
         _audioSource.Play();
     }
