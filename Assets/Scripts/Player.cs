@@ -150,11 +150,19 @@ public class Player : MonoBehaviour
         _audioSource.Play();
     }
 
+
+    public void RefillAmmo()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
+
     public void Damage()
     {
         if (_isShieldActive != true)
         {
             _lives--;
+
 
             _uiManager.UpdateLives(_lives);
         }
@@ -216,6 +224,26 @@ public class Player : MonoBehaviour
         _shieldVolume = 3;
         this.gameObject.transform.GetChild(0).gameObject.SetActive(true); // activating Shield 
        // StartCoroutine(ShieldPowerDownCoroutine());        
+    }
+
+    public void HealthCollected()
+    {
+        _lives += 1;
+        _uiManager.UpdateLives(_lives);
+
+        if (_lives == 2)
+        {
+            _rightEngineFire.SetActive(true);
+        }
+        else if (_lives == 1)
+        {
+            _leftEngineFire.SetActive(true);
+        }
+        else if (_lives == 3)
+        {
+            _leftEngineFire.SetActive(false);
+            _rightEngineFire.SetActive(false);
+        }
     }
 
     IEnumerator TripleShotPowerDownRoutune()

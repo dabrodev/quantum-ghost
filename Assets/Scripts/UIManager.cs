@@ -42,11 +42,16 @@ public class UIManager : MonoBehaviour
         {
             _ammoCountText.color = Color.red;
         }
+        else
+        {
+            _ammoCountText.color = Color.white;
+        }
 
     }
 
     public void UpdateLives(int currentLives)
     {
+        Debug.Log("Number of Lives: " + currentLives);
         _livesImg.sprite = _liveSprites[currentLives];
     }
 

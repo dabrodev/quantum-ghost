@@ -1242,7 +1242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1258868043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,6 +1384,8 @@ MonoBehaviour:
   - {fileID: 1974168030254007191, guid: 6dcb629cf3bde4cde9e6ba6fd1964069, type: 3}
   - {fileID: 5382996578121944069, guid: c5ad7f834763e455aabc5b0ab11161ab, type: 3}
   - {fileID: 8376075809378491843, guid: 909dcafdcfa234c888106fcd253d9de5, type: 3}
+  - {fileID: 4899563031352200785, guid: 9e154eaf0e07a49739bf858442e89a9a, type: 3}
+  - {fileID: 7215040607179896666, guid: c7b8048b12b1c4aa0bb5cdb515bdd27f, type: 3}
 --- !u!4 &1358050589
 Transform:
   m_ObjectHideFlags: 0
@@ -1714,7 +1716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629175686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: -0.16, y: 0.84, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1815,6 +1817,7 @@ MonoBehaviour:
   _speed: 3.5
   _laserOffset: 0.8
   _fireRate: 0.5
+  _ammoCount: 15
   _lives: 3
   _laserPrefab: {fileID: 2433780369211541801, guid: d29b1f4ed89e641fe99a851cef94ddc0,
     type: 3}
@@ -2129,7 +2132,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.28, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
