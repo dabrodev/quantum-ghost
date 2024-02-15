@@ -22,7 +22,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
+    private GameObject _multiDirShotPrefab;
+    [SerializeField]
     private bool _isTripleShotActive = false;
+    [SerializeField]
+    private bool _isMultiDirShotActive = false;
     [SerializeField]
     private bool _isSpeedActive = false;
     [SerializeField]
@@ -130,9 +134,13 @@ public class Player : MonoBehaviour
     {
         _nextFire = Time.time + _fireRate;
 
-        if(_isTripleShotActive)
+        if (_isTripleShotActive)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else if (_isMultiDirShotActive)
+        {
+            Instantiate(_multiDirShotPrefab, transform.position, Quaternion.identity);
         }
         else
         {
@@ -210,6 +218,13 @@ public class Player : MonoBehaviour
         StartCoroutine(TripleShotPowerDownRoutune());
     }
 
+
+    public void MultiDirShotActive()
+    {
+        _isMultiDirShotActive = true;
+        StartCoroutine(MultiDirShotCoroutine());
+    }
+
     public void SpeedActive()
     {
         _isSpeedActive = true;
@@ -250,6 +265,12 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         _isTripleShotActive = false;
+    }
+
+    IEnumerator MultiDirShotCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isMultiDirShotActive = false;
     }
 
     IEnumerator SpeedPowerDownRoutune()

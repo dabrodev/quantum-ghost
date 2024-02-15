@@ -56,7 +56,10 @@ public class PowerUp : MonoBehaviour
                     player.RefillAmmo();
                     break;
                 case 4:
-                    player.HealCollected();
+                    player.HealthCollected();
+                    break;
+                case 5:
+                    player.MultiDirShotActive();
                     break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
