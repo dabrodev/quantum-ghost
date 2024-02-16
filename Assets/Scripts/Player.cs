@@ -35,6 +35,9 @@ public class Player : MonoBehaviour
     private int _score = 0;
 
     [SerializeField]
+    private Camera cameraShake;
+
+    [SerializeField]
     private GameObject _leftEngineFire, _rightEngineFire;
 
     [SerializeField]
@@ -47,6 +50,11 @@ public class Player : MonoBehaviour
     private GameManager _gameManager;
     [SerializeField]
     private int _shieldVolume;
+    [SerializeField]
+    private float _thrusterRate = 1.0f;
+    private float _nextThruster = 0.0f;
+    [SerializeField]
+    private float _thrusterVolume= 1f;
 
     void Start()
     {
@@ -84,6 +92,17 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+       
+
+        if ( Time.time > _nextThruster && _thrusterVolume < 1.0f && !Input.GetKey(KeyCode.LeftShift))
+        {
+            _nextThruster = Time.time + _thrusterRate;
+
+            _thrusterVolume += 0.05f;
+            _uiManager.UpdateThruster(_thrusterVolume);
+        }
+
+
         PlayerMovement();
 
         if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire && _ammoCount > 0)
@@ -91,14 +110,25 @@ public class Player : MonoBehaviour
             FireLaser();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+
+
+        if (Input.GetKey(KeyCode.LeftShift) && Time.time > _nextThruster && _thrusterVolume > 0)
         {
-            _speed *= 2;
+            _nextThruster = Time.time + _thrusterRate;
+            _thrusterVolume -= 0.1f;
+            _uiManager.UpdateThruster(_thrusterVolume);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0)
         {
-            _speed /= 2;
+            _speed *= 2;
+            
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0)
+        {
+            _speed = 3.5f;
         }
     }
 
@@ -163,6 +193,12 @@ public class Player : MonoBehaviour
     {
         _ammoCount = 15;
         _uiManager.UpdateAmmo(_ammoCount);
+    }
+
+
+    public void DamageShake()
+    {
+
     }
 
     public void Damage()

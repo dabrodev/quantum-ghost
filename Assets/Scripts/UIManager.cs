@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     private bool _display = false;
     [SerializeField]
     private Scrollbar _shieldStrength;
+    [SerializeField]
+    private Scrollbar _thrusterVolume;
     
     void Start()
     {
@@ -76,6 +78,20 @@ public class UIManager : MonoBehaviour
         if (_shieldStrength.size < 0.33f)
         {
             _shieldStrength.gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateThruster(float currentThrusterSize)
+    {
+        _thrusterVolume.size = currentThrusterSize;
+
+        if (_thrusterVolume.size == 0)
+        {
+            _thrusterVolume.transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            _thrusterVolume.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
 
