@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _nextFire = 0.0f;
     [SerializeField]
+    private int _ammoCount = 15;
+    [SerializeField]
     private int _lives = 3;
 
     [SerializeField]
@@ -20,13 +22,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
+    private GameObject _multiDirShotPrefab;
+    [SerializeField]
     private bool _isTripleShotActive = false;
+    [SerializeField]
+    private bool _isMultiDirShotActive = false;
     [SerializeField]
     private bool _isSpeedActive = false;
     [SerializeField]
     private bool _isShieldActive = false;
     [SerializeField]
     private int _score = 0;
+
+    [SerializeField]
+    private Camera _cameraShake;
 
     [SerializeField]
     private GameObject _leftEngineFire, _rightEngineFire;
@@ -39,6 +48,13 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private GameManager _gameManager;
+    [SerializeField]
+    private int _shieldVolume;
+    [SerializeField]
+    private float _thrusterRate = 1.0f;
+    private float _nextThruster = 0.0f;
+    [SerializeField]
+    private float _thrusterVolume= 1f;
 
     void Start()
     {
@@ -76,11 +92,43 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+       
+
+        if ( Time.time > _nextThruster && _thrusterVolume < 1.0f && !Input.GetKey(KeyCode.LeftShift))
+        {
+            _nextThruster = Time.time + _thrusterRate;
+
+            _thrusterVolume += 0.05f;
+            _uiManager.UpdateThruster(_thrusterVolume);
+        }
+
+
         PlayerMovement();
 
-        if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire)
+        if (Input.GetKey(KeyCode.Space) && Time.time > _nextFire && _ammoCount > 0)
         {
             FireLaser();
+        }
+
+
+
+        if (Input.GetKey(KeyCode.LeftShift) && Time.time > _nextThruster && _thrusterVolume > 0)
+        {
+            _nextThruster = Time.time + _thrusterRate;
+            _thrusterVolume -= 0.1f;
+            _uiManager.UpdateThruster(_thrusterVolume);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0)
+        {
+            _speed *= 2;
+            
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0)
+        {
+            _speed = 3.5f;
         }
     }
 
@@ -116,16 +164,41 @@ public class Player : MonoBehaviour
     {
         _nextFire = Time.time + _fireRate;
 
-        if(_isTripleShotActive)
+        if (_isTripleShotActive)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else if (_isMultiDirShotActive)
+        {
+            Instantiate(_multiDirShotPrefab, transform.position, Quaternion.identity);
         }
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
         }
 
+        if (_ammoCount > 0)
+        {
+            _ammoCount--;
+        }
+
+        _uiManager.UpdateAmmo(_ammoCount);
+
+
         _audioSource.Play();
+    }
+
+
+    public void RefillAmmo()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
+
+
+    public void DamageShake()
+    {
+        StartCoroutine(SpaceShaker());
     }
 
     public void Damage()
@@ -133,12 +206,20 @@ public class Player : MonoBehaviour
         if (_isShieldActive != true)
         {
             _lives--;
+            DamageShake();
 
             _uiManager.UpdateLives(_lives);
         }
         else
         {
-            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            _shieldVolume--;
+            _uiManager.DecreaseShieldStrength();
+
+            if (_shieldVolume == 0)
+            {
+                this.gameObject.transform.GetChild(0).gameObject.SetActive(false); // deactivating shield
+                _isShieldActive = false;
+            }
         }
 
         if (_lives < 1)
@@ -166,10 +247,18 @@ public class Player : MonoBehaviour
         }
     }
 
+
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutune());
+    }
+
+
+    public void MultiDirShotActive()
+    {
+        _isMultiDirShotActive = true;
+        StartCoroutine(MultiDirShotCoroutine());
     }
 
     public void SpeedActive()
@@ -183,14 +272,57 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Shield activated");
         _isShieldActive = true;
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(ShieldPowerDownCoroutine());        
+        _shieldVolume = 3;
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(true); // activating Shield 
+       // StartCoroutine(ShieldPowerDownCoroutine());        
+    }
+
+    public void HealthCollected()
+    {
+
+
+        if (_lives < 3)
+        {
+            _lives += 1;
+            _uiManager.UpdateLives(_lives);
+        }
+
+        if (_lives == 2)
+        {
+            _rightEngineFire.SetActive(true);
+        }
+        else if (_lives == 1)
+        {
+            _leftEngineFire.SetActive(true);
+        }
+        else if (_lives == 3)
+        {
+            _leftEngineFire.SetActive(false);
+            _rightEngineFire.SetActive(false);
+        }
+    }
+
+
+    IEnumerator SpaceShaker()
+    {
+       
+        yield return new WaitForSeconds(0.1f);
+        _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 1.2f, _cameraShake.transform.position.z);
+        yield return new WaitForSeconds(0.1f);
+        _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 0.9f, _cameraShake.transform.position.z);
+
     }
 
     IEnumerator TripleShotPowerDownRoutune()
     {
         yield return new WaitForSeconds(5);
         _isTripleShotActive = false;
+    }
+
+    IEnumerator MultiDirShotCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isMultiDirShotActive = false;
     }
 
     IEnumerator SpeedPowerDownRoutune()

@@ -7,17 +7,18 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
-    private int _powerupID; //0 = Triple Shot 1 = Speed 2 = Shields
+    private int _powerupID; // =Triple-Shot 1=Speed 2=Shields 3=Ammo 4=Health
 
     // [SerializeField] 
     // private AudioClip _clip; // Alternative solution
 
     private AudioSource _audioSource;
-
+    private UIManager _uiManager;
 
     private void Start()
     {
         _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -49,6 +50,16 @@ public class PowerUp : MonoBehaviour
                     break;
                 case 2:
                     player.ShieldActive();
+                    _uiManager.ShowShieldStrength();
+                    break;
+                case 3:
+                    player.RefillAmmo();
+                    break;
+                case 4:
+                    player.HealthCollected();
+                    break;
+                case 5:
+                    player.MultiDirShotActive();
                     break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);

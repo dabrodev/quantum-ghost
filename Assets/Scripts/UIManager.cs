@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _scoreText;
     [SerializeField]
+    private Text _ammoCountText;
+    [SerializeField]
     private Image _livesImg;
     [SerializeField]
     private Sprite[] _liveSprites;
@@ -17,10 +19,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _resetText;
     private bool _display = false;
+    [SerializeField]
+    private Scrollbar _shieldStrength;
+    [SerializeField]
+    private Scrollbar _thrusterVolume;
     
     void Start()
     {
         _scoreText.text = "Score: " + 0;
+        _ammoCountText.text = "Ammo: " + 15;
         _gameOverText.gameObject.SetActive(false);
     }
 
@@ -29,8 +36,24 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + playerScore.ToString();
     }
 
+    public void UpdateAmmo(int ammoCount)
+    {
+        _ammoCountText.text = "Ammo: " + ammoCount.ToString();
+
+        if (ammoCount == 0)
+        {
+            _ammoCountText.color = Color.red;
+        }
+        else
+        {
+            _ammoCountText.color = Color.white;
+        }
+
+    }
+
     public void UpdateLives(int currentLives)
     {
+        Debug.Log("Number of Lives: " + currentLives);
         _livesImg.sprite = _liveSprites[currentLives];
     }
 
@@ -39,6 +62,39 @@ public class UIManager : MonoBehaviour
         StartCoroutine(GameOverFlickerCoroutine());
         _resetText.gameObject.SetActive(true);
     }
+
+    public void ShowShieldStrength()
+    {
+        _shieldStrength.gameObject.SetActive(true);
+        _shieldStrength.size = 1f;
+    }
+
+    public void DecreaseShieldStrength()
+    {
+        Debug.Log("Decrease Shield called");
+
+        _shieldStrength.size -= 0.33f;
+
+        if (_shieldStrength.size < 0.33f)
+        {
+            _shieldStrength.gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateThruster(float currentThrusterSize)
+    {
+        _thrusterVolume.size = currentThrusterSize;
+
+        if (_thrusterVolume.size == 0)
+        {
+            _thrusterVolume.transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            _thrusterVolume.transform.GetChild(0).gameObject.SetActive(true);
+        }
+    }
+
 
     IEnumerator GameOverFlickerCoroutine()
     {

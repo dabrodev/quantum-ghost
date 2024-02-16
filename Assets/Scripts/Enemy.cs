@@ -111,6 +111,8 @@ public class Enemy : MonoBehaviour
                 _player.AddScore(10);
             }
         }
+
+
     }
 
     void RandomPos()
