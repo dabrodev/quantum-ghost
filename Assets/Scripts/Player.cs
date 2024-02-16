@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     private int _score = 0;
 
     [SerializeField]
-    private Camera cameraShake;
+    private Camera _cameraShake;
 
     [SerializeField]
     private GameObject _leftEngineFire, _rightEngineFire;
@@ -198,7 +198,7 @@ public class Player : MonoBehaviour
 
     public void DamageShake()
     {
-
+        StartCoroutine(SpaceShaker());
     }
 
     public void Damage()
@@ -206,7 +206,7 @@ public class Player : MonoBehaviour
         if (_isShieldActive != true)
         {
             _lives--;
-
+            DamageShake();
 
             _uiManager.UpdateLives(_lives);
         }
@@ -279,8 +279,13 @@ public class Player : MonoBehaviour
 
     public void HealthCollected()
     {
-        _lives += 1;
-        _uiManager.UpdateLives(_lives);
+
+
+        if (_lives < 3)
+        {
+            _lives += 1;
+            _uiManager.UpdateLives(_lives);
+        }
 
         if (_lives == 2)
         {
@@ -295,6 +300,17 @@ public class Player : MonoBehaviour
             _leftEngineFire.SetActive(false);
             _rightEngineFire.SetActive(false);
         }
+    }
+
+
+    IEnumerator SpaceShaker()
+    {
+       
+        yield return new WaitForSeconds(0.1f);
+        _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 1.2f, _cameraShake.transform.position.z);
+        yield return new WaitForSeconds(0.1f);
+        _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 0.9f, _cameraShake.transform.position.z);
+
     }
 
     IEnumerator TripleShotPowerDownRoutune()
