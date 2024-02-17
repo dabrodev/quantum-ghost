@@ -196,17 +196,13 @@ public class Player : MonoBehaviour
     }
 
 
-    public void DamageShake()
-    {
-        StartCoroutine(SpaceShaker());
-    }
-
     public void Damage()
     {
         if (_isShieldActive != true)
         {
             _lives--;
-            DamageShake();
+            // StartCoroutine(SpaceShaker());
+            StartCoroutine(EnhancedSpaceShaker(0.5f, 0.2f));
 
             _uiManager.UpdateLives(_lives);
         }
@@ -305,12 +301,26 @@ public class Player : MonoBehaviour
 
     IEnumerator SpaceShaker()
     {
-       
         yield return new WaitForSeconds(0.1f);
         _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 1.2f, _cameraShake.transform.position.z);
         yield return new WaitForSeconds(0.1f);
         _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 0.9f, _cameraShake.transform.position.z);
+    }
 
+    IEnumerator EnhancedSpaceShaker(float duration, float magnitude)
+    {
+        Vector3 originalPosition = _cameraShake.transform.position;
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+            _cameraShake.transform.position = new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        _cameraShake.transform.position = originalPosition;
     }
 
     IEnumerator TripleShotPowerDownRoutune()
