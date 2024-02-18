@@ -22,6 +22,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnRarePowerupRoutine());
+        
     }
 
     private IEnumerator SpawnEnemyRoutine()
@@ -35,6 +36,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(5);
         }
     }
+
 
     private IEnumerator SpawnPowerupRoutine()
     {
