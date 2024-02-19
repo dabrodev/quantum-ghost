@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
     private float _nextThruster = 0.0f;
     [SerializeField]
     private float _thrusterVolume= 1f;
+    private bool _isSlowDown = false;
 
     void Start()
     {
@@ -120,13 +121,13 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0 && _isSlowDown == false)
         {
             _speed *= 2;
             
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0)
+        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0 && _isSlowDown == false)
         {
             _speed = 3.5f;
         }
@@ -273,6 +274,12 @@ public class Player : MonoBehaviour
        // StartCoroutine(ShieldPowerDownCoroutine());        
     }
 
+    public void SlowdownActive()
+    {
+        _isSlowDown = true;
+        _speed = 1;
+    }
+
     public void HealthCollected()
     {
 
@@ -346,6 +353,13 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
         this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         _isShieldActive = false;
+        _speed = 3.5f;
+    }
+
+    IEnumerator SlowdownCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isSlowDown = false;
     }
 
     public void AddScore(int points)

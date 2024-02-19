@@ -1622,6 +1622,7 @@ MonoBehaviour:
   - {fileID: 8376075809378491843, guid: 909dcafdcfa234c888106fcd253d9de5, type: 3}
   - {fileID: 4899563031352200785, guid: 9e154eaf0e07a49739bf858442e89a9a, type: 3}
   - {fileID: 7215040607179896666, guid: c7b8048b12b1c4aa0bb5cdb515bdd27f, type: 3}
+  - {fileID: 6781393699357454068, guid: 42afc74e4dce54cbf82a565c53b62019, type: 3}
   _rarePowerups:
   - {fileID: 1444603692977291460, guid: 1ec43a966f8634f8d919f146a0615c3e, type: 3}
 --- !u!4 &1358050589
