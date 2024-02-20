@@ -61,6 +61,9 @@ public class PowerUp : MonoBehaviour
                 case 5:
                     player.MultiDirShotActive();
                     break;
+                case 6:
+                    player.SlowdownActive();
+                    break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
                     break;

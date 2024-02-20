@@ -22,6 +22,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnRarePowerupRoutine());
+        StartCoroutine(SpawnEnemyWaveRoutine());
     }
 
     private IEnumerator SpawnEnemyRoutine()
@@ -33,6 +34,28 @@ public class SpawnManager : MonoBehaviour
             GameObject newEnemy = Instantiate(_enemyPrefab, randomPos, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(5);
+        }
+    }
+
+    private IEnumerator SpawnEnemyWaveRoutine()
+    {
+        yield return new WaitForSeconds(20.0f);
+
+        while (_stopSpawning == false)
+        {
+           
+            Vector3 randomPos = new Vector3(Random.Range(-9.0f, 9.0f), 8.0f, 0);
+
+            float randomRareTime = Random.Range(9.0f, 14f);
+            
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefab, randomPos + new Vector3(i*2, 0, 0) , Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }
+          
+            yield return new WaitForSeconds(randomRareTime);
         }
     }
 

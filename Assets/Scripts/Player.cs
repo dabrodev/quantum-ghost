@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
     private float _nextThruster = 0.0f;
     [SerializeField]
     private float _thrusterVolume= 1f;
+    private bool _isSlowDown = false;
 
     void Start()
     {
@@ -120,13 +121,13 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0 && _isSlowDown == false)
         {
             _speed *= 2;
             
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0)
+        if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0 && _isSlowDown == false)
         {
             _speed = 3.5f;
         }
@@ -196,17 +197,13 @@ public class Player : MonoBehaviour
     }
 
 
-    public void DamageShake()
-    {
-        StartCoroutine(SpaceShaker());
-    }
-
     public void Damage()
     {
         if (_isShieldActive != true)
         {
             _lives--;
-            DamageShake();
+            // StartCoroutine(SpaceShaker());
+            StartCoroutine(EnhancedSpaceShaker(0.5f, 0.2f));
 
             _uiManager.UpdateLives(_lives);
         }
@@ -277,6 +274,12 @@ public class Player : MonoBehaviour
        // StartCoroutine(ShieldPowerDownCoroutine());        
     }
 
+    public void SlowdownActive()
+    {
+        _isSlowDown = true;
+        _speed = 1;
+    }
+
     public void HealthCollected()
     {
 
@@ -305,12 +308,26 @@ public class Player : MonoBehaviour
 
     IEnumerator SpaceShaker()
     {
-       
         yield return new WaitForSeconds(0.1f);
         _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 1.2f, _cameraShake.transform.position.z);
         yield return new WaitForSeconds(0.1f);
         _cameraShake.transform.position = new Vector3(_cameraShake.transform.position.x, 0.9f, _cameraShake.transform.position.z);
+    }
 
+    IEnumerator EnhancedSpaceShaker(float duration, float magnitude)
+    {
+        Vector3 originalPosition = _cameraShake.transform.position;
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+            _cameraShake.transform.position = new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        _cameraShake.transform.position = originalPosition;
     }
 
     IEnumerator TripleShotPowerDownRoutune()
@@ -336,6 +353,13 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
         this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         _isShieldActive = false;
+        _speed = 3.5f;
+    }
+
+    IEnumerator SlowdownCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isSlowDown = false;
     }
 
     public void AddScore(int points)

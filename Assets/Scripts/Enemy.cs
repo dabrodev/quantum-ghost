@@ -17,10 +17,18 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private AudioClip _explosionSoundClip;
     private AudioSource _audioSource;
-    
+    private Vector3 direction;
+    private float _startXPosition;
+    private int _randomSpecial = 0;
 
     private void Start()
     {
+        _startXPosition = transform.position.x;
+
+        direction = new Vector3(1f, -1f, 0);
+        
+
+
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
 
@@ -45,7 +53,18 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        EnemyMovement();
+        
+        if (_randomSpecial == 1)
+        {
+            SpecialMovement();
+        }
+        else
+        {
+            BasicMovement();
+        }
+
+        StartCoroutine(RandomSpecialCoroutine());
+        
 
         if (Time.time > _nextFire)
         {
@@ -53,9 +72,30 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void EnemyMovement() {
+    void BasicMovement() {
 
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+        if (transform.position.y < -6.0f)
+        {
+            RandomPos();
+            transform.position = new Vector3(_randomPosX, 8.0f, 0);
+        }
+    }
+
+    void SpecialMovement()
+    {
+        if (transform.position.x > _startXPosition + 2.0f)
+        {
+            direction = new Vector3(-1f, -1f, 0);
+        }
+        else if ( transform.position.x < _startXPosition - 2.0f)
+        {
+            direction = new Vector3(1f, -1f, 0);
+        }
+
+        transform.Translate(direction * _speed * Time.deltaTime);
+
 
         if (transform.position.y < -6.0f)
         {
@@ -118,5 +158,17 @@ public class Enemy : MonoBehaviour
     void RandomPos()
     {
         _randomPosX = Random.Range(-9.0f, 9.0f);
+    }
+
+
+    IEnumerator RandomSpecialCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10f);
+            _randomSpecial = 1;
+            yield return new WaitForSeconds(5f);
+            _randomSpecial = 0;
+        }
     }
 }
