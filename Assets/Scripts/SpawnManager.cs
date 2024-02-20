@@ -8,12 +8,13 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private GameObject _redEnemyPrefab;
+    [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups;
     [SerializeField]
     private GameObject[] _rarePowerups;
-
 
     private bool _stopSpawning = false;
 
@@ -23,6 +24,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnRarePowerupRoutine());
         StartCoroutine(SpawnEnemyWaveRoutine());
+        StartCoroutine(SpawnRareRedEnemyRoutine());
     }
 
     private IEnumerator SpawnEnemyRoutine()
@@ -48,7 +50,6 @@ public class SpawnManager : MonoBehaviour
 
             float randomRareTime = Random.Range(9.0f, 14f);
             
-
             for (int i = 0; i < 5; i++)
             {
                 GameObject newEnemy = Instantiate(_enemyPrefab, randomPos + new Vector3(i*2, 0, 0) , Quaternion.identity);
@@ -84,6 +85,23 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(randomTime);
         }
     }
+
+
+    private IEnumerator SpawnRareRedEnemyRoutine()
+    {
+        while (_stopSpawning == false)
+        {
+            yield return new WaitForSeconds(3.0f);
+            float randomTime = Random.Range(10f, 15f);
+            Vector3 radnomPos = new Vector3(Random.Range(-9.0f, 9.0f), 8.0f, 0);
+            GameObject newRedEnemy = Instantiate(_redEnemyPrefab, radnomPos, Quaternion.identity);
+            newRedEnemy.transform.parent = _enemyContainer.transform;
+            yield return new WaitForSeconds(randomTime);
+
+        }
+
+    }
+
 
     public void onPlayerDeath()
     {
