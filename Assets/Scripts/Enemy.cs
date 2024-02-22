@@ -21,13 +21,13 @@ public class Enemy : MonoBehaviour
     private float _startXPosition;
     private int _randomSpecial = 0;
     private GameObject _enemyShield;
+    private bool _isBehind = false;
 
-   
+    private Vector3 _laserPos;
+
 
     void Start()
     {
-
-
 
         _startXPosition = transform.position.x;
 
@@ -61,11 +61,12 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-       
+        IsBehindCheck();
 
         if (_randomSpecial == 1)
         {
             SpecialMovement();
+
         }
         else
         {
@@ -114,18 +115,57 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void IsBehindCheck()
+    {
+        float playerHeight = 1.8f;
+
+        if (_player != null)
+        {
+            if (transform.position.y + playerHeight < _player.transform.position.y)
+            {
+                Debug.Log("Enemy Behind");
+
+                _isBehind = true;
+            }
+            else
+            {
+                Debug.Log("Enemy in Front");
+                _isBehind = false;
+            }
+        }
+    }
+
     void FireEnemyLaser()
     {
-        _fireRate = Random.Range(3f, 7f);
+        _fireRate = Random.Range(3f, 5f);
         _nextFire = Time.time + _fireRate;
-        
-        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position, Quaternion.identity);
+
+        if (_isBehind)
+        {
+            _laserPos = transform.position + new Vector3(0, 2.8f, 0);
+        }
+        else
+        { 
+            _laserPos = transform.position;
+        }
+
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, _laserPos, Quaternion.identity);
 
         Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
 
         for (int i = 0; i < lasers.Length; i++)
         {
             lasers[i].SetEnemyLaser();
+            if (_isBehind)
+            {
+                lasers[i].SetEnemyBehind();
+            }
+            else
+            {
+                lasers[i].UnsetEnemyBehind();
+
+            }
         }
     }
 

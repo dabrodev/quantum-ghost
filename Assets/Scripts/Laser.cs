@@ -7,10 +7,11 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float _speed = 8.0f;
     private bool _isEnemyLaser = false;
+    private bool _isEnemyBehind = false;
 
     void Update()
     {
-        if (_isEnemyLaser == false)
+        if (_isEnemyLaser == false || _isEnemyBehind == true)
         {
             MoveUp();
         }
@@ -57,6 +58,16 @@ public class Laser : MonoBehaviour
     public void SetEnemyLaser()
     {
         _isEnemyLaser = true;
+    }
+
+    public void SetEnemyBehind()
+    {
+        _isEnemyBehind = true;
+    }
+
+    public void UnsetEnemyBehind()
+    {
+        _isEnemyBehind = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

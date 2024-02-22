@@ -43,14 +43,15 @@ public class RedEnemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-
-        _distance = Vector3.Distance(_player.transform.position, transform.position);
-
-        if (_distance < 4.0f)
+        if (_player != null)
         {
-            AggressiveMove();
-        }
+            _distance = Vector3.Distance(_player.transform.position, transform.position);
 
+            if (_distance < 4.0f)
+            {
+                AggressiveMove();
+            }
+        }
 
         if (transform.position.y < 5.0f && _go)
         {
@@ -66,11 +67,15 @@ public class RedEnemy : MonoBehaviour
     }
 
 
+
+
+
     private void AggressiveMove()
     {  
         float step = _aggressiveSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, step);
     }
+
 
 
     private void OnTriggerEnter2D(Collider2D other)
