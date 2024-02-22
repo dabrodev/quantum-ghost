@@ -40,26 +40,46 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(4.0f);
 
             float randomTime = Random.Range(3.0f, 7.0f);
-            float frequentTime = Random.Range(1.0f, 2.0f);
-            float rareTime = Random.Range(9.0f, 12.0f);
 
-            float finalTime = randomTime;
 
-            int randomPowerup = Random.Range(0, _powerups.Length);
 
-            Debug.Log("Powerup Index: " + randomPowerup);
-            if (randomPowerup == 3) // Ammo
-            {
-                finalTime = frequentTime;
-            }
-            else if (randomPowerup == 4) // Health
-            {
-                finalTime = rareTime;
-            }
+            //int randomPowerup = Random.Range(0, _powerups.Length);
+            int randomPowerup = GetWeightedRandomPowerup();
+        
+      
 
             GameObject newPowerup = Instantiate(_powerups[randomPowerup], _randomPos, Quaternion.identity);
-            yield return new WaitForSeconds(finalTime);
+            yield return new WaitForSeconds(randomTime);
         }
+    }
+
+    private int GetWeightedRandomPowerup()
+    {
+        // Define weights for each powerup; higher numbers mean higher chance of spawning
+        int[] weights = new int[] { 10, 10, 10, 50, 5, 15 }; // Example weights: Ammo (3) is more common, Health (4) is rare
+        int totalWeight = 0;
+
+        // Calculate the sum of all weights
+        foreach (int weight in weights)
+        {
+            totalWeight += weight;
+        }
+
+        // Generate a random value from 0 to the sum of the weights
+        int randomValue = Random.Range(0, totalWeight);
+        int runningTotal = 0;
+
+        // Determine which weight range the randomValue falls into
+        for (int i = 0; i < weights.Length; i++)
+        {
+            runningTotal += weights[i];
+            if (randomValue < runningTotal)
+            {
+                return i; // Return the index of the selected power-up
+            }
+        }
+
+        return 0; // Default to the first power-up as a fallback
     }
 
     private IEnumerator SpawnRarePowerupRoutine()
