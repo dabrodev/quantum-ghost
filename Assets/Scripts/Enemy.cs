@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float _speed = 4.0f;
+    private float _speed = 3.0f;
     private float _randomPosX;
     private Player _player;
     private Animator _anim;
@@ -20,13 +20,21 @@ public class Enemy : MonoBehaviour
     private Vector3 direction;
     private float _startXPosition;
     private int _randomSpecial = 0;
+    private GameObject _enemyShield;
 
-    private void Start()
+   
+
+    void Start()
     {
+
+
+
         _startXPosition = transform.position.x;
 
         direction = new Vector3(1f, -1f, 0);
-        
+
+
+        _enemyShield = this.gameObject.transform.GetChild(0).gameObject;
 
 
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -53,7 +61,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        
+       
+
         if (_randomSpecial == 1)
         {
             SpecialMovement();
@@ -72,9 +81,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void BasicMovement() {
-
+    void BasicMovement() { 
+       
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
 
         if (transform.position.y < -6.0f)
         {
@@ -110,6 +120,7 @@ public class Enemy : MonoBehaviour
         _nextFire = Time.time + _fireRate;
         
         GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position, Quaternion.identity);
+
         Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
         for (int i = 0; i < lasers.Length; i++)
@@ -124,41 +135,50 @@ public class Enemy : MonoBehaviour
         {
             Player player = other.transform.GetComponent<Player>();
 
+       
+            DestroyEnemy(other);
+
             if (player != null)
             {
                 player.Damage();
             }
-
-            _anim.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            _speed = 0;
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 2.0f);
         }
 
         if (other.tag == "Laser")
         {
-            _anim.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            _speed = 0;
-            Destroy(other.gameObject);
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 2.0f);
 
+            DestroyEnemy(other);
 
             if (_player != null)
             {
                 _player.AddScore(10);
             }
         }
+    }
 
-
+    void DestroyEnemy(Collider2D collider)
+    {
+        if (_enemyShield.activeSelf == false)
+        {
+            _anim.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
+            _speed = 0;
+            Destroy(collider.gameObject);
+            Destroy(GetComponent<Collider2D>());
+            Destroy(this.gameObject, 2.0f);
+        }
+        else
+        {
+            _enemyShield.SetActive(false);
+        }
     }
 
     void RandomPos()
     {
         _randomPosX = Random.Range(-9.0f, 9.0f);
     }
+
+
 
 
     IEnumerator RandomSpecialCoroutine()

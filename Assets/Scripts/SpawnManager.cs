@@ -18,8 +18,8 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
     private Vector3 _randomPos;
    
-    
-
+    private int _count = 1;
+   
 
     public void StartSpawning()
     {
@@ -30,7 +30,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnRarePowerupRoutine());
         StartCoroutine(SpawnEnemyWaveRoutine());
         StartCoroutine(SpawnRareRedEnemyRoutine());
-        StartCoroutine(EnemyShieldRoutine());
     }
 
     private IEnumerator SpawnPowerupRoutine()
@@ -41,13 +40,14 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(4.0f);
 
             float randomTime = Random.Range(3.0f, 7.0f);
-            float frequentTime = Random.Range(2.0f, 3.0f);
+            float frequentTime = Random.Range(1.0f, 2.0f);
             float rareTime = Random.Range(9.0f, 12.0f);
 
             float finalTime = randomTime;
 
             int randomPowerup = Random.Range(0, _powerups.Length);
 
+            Debug.Log("Powerup Index: " + randomPowerup);
             if (randomPowerup == 3) // Ammo
             {
                 finalTime = frequentTime;
@@ -78,31 +78,26 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator SpawnEnemyRoutine()
     {
+        
         yield return new WaitForSeconds(3.0f);
 
         while (_stopSpawning == false)
         {
-
+            
             GameObject newEnemy = Instantiate(_enemyPrefab, _randomPos, Quaternion.identity);
             
             newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5);
-        }
-    }
 
-    private IEnumerator EnemyShieldRoutine()
-    {
-        while (_stopSpawning == false)
-        {
+            if (_count % 3 == 0)
+            {
+                newEnemy.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            _count++;
+
             yield return new WaitForSeconds(5);
-            _enemyPrefab.transform.GetChild(0).gameObject.SetActive(true);
-            yield return new WaitForSeconds(1);
-            _enemyPrefab.transform.GetChild(0).gameObject.SetActive(false);
-            yield return new WaitForSeconds(5);
+            
         }
-       
-    }
-       
+    }  
 
     private IEnumerator SpawnEnemyWaveRoutine()
     {

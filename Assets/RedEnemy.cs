@@ -6,21 +6,21 @@ public class RedEnemy : MonoBehaviour
 {
 
     private float _speed = 2f;
+    private float _aggressiveSpeed = 5f;
     private bool _go = true;
     private float _randomPosX;
     private Animator _anim;
     private AudioSource _audioSource;
     private Player _player;
     private bool _isRedEnemyDead = false;
-
+    private float _distance;
 
     GameObject beamLaser;
-    // Start is called before the first frame update
+
     void Start()
     {
 
         beamLaser = this.gameObject.transform.GetChild(0).gameObject;
-
 
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
@@ -38,10 +38,18 @@ public class RedEnemy : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+
+        _distance = Vector3.Distance(_player.transform.position, transform.position);
+
+        if (_distance < 4.0f)
+        {
+            AggressiveMove();
+        }
 
 
         if (transform.position.y < 5.0f && _go)
@@ -49,12 +57,19 @@ public class RedEnemy : MonoBehaviour
           
             StartCoroutine(LaserDownCoroutine());
             _go = false;
-            
         }
         else if (transform.position.y < -6.0f)
         {
+
             Destroy(this.gameObject);
         }
+    }
+
+
+    private void AggressiveMove()
+    {  
+        float step = _aggressiveSpeed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, step);
     }
 
 
@@ -97,9 +112,7 @@ public class RedEnemy : MonoBehaviour
                 _player.AddScore(20);
             }
         }
-
     }
-
 
     IEnumerator LaserDownCoroutine()
     {
@@ -116,13 +129,5 @@ public class RedEnemy : MonoBehaviour
         }
             yield return new WaitForSeconds(1);
             _speed = 15f;      
-
     }
-
-
-    void RandomPos()
-    {
-        _randomPosX = Random.Range(-9.0f, 9.0f);
-    }
-
 }
