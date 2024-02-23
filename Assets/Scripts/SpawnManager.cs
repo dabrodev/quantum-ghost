@@ -82,6 +82,7 @@ public class SpawnManager : MonoBehaviour
         return 0; // Default to the first power-up as a fallback
     }
 
+
     private IEnumerator SpawnRarePowerupRoutine()
     {
         while (_stopSpawning == false)

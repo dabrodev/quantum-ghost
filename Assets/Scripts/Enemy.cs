@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField]
     private float _speed = 3.0f;
     private float _randomPosX;
     private Player _player;
@@ -22,6 +23,10 @@ public class Enemy : MonoBehaviour
     private int _randomSpecial = 0;
     private GameObject _enemyShield;
     private bool _isBehind = false;
+    private Vector3 _pickupPos;
+    private bool _isPickupPosReceived = false;
+    private bool _powerupDestroyed = false;
+ 
 
     private Vector3 _laserPos;
 
@@ -35,7 +40,6 @@ public class Enemy : MonoBehaviour
 
 
         _enemyShield = this.gameObject.transform.GetChild(0).gameObject;
-
 
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
@@ -80,6 +84,9 @@ public class Enemy : MonoBehaviour
         {
             FireEnemyLaser();
         }
+
+
+
     }
 
     void BasicMovement() { 
@@ -123,20 +130,26 @@ public class Enemy : MonoBehaviour
         {
             if (transform.position.y + playerHeight < _player.transform.position.y)
             {
-                Debug.Log("Enemy Behind");
+               // Debug.Log("Enemy Behind");
 
                 _isBehind = true;
             }
             else
             {
-                Debug.Log("Enemy in Front");
+               // Debug.Log("Enemy in Front");
                 _isBehind = false;
             }
         }
     }
 
+   /* internal void PowerupDestroyed()
+    {
+        throw new System.NotImplementedException();
+    }*/
+
     void FireEnemyLaser()
     {
+
         _fireRate = Random.Range(3f, 5f);
         _nextFire = Time.time + _fireRate;
 
@@ -146,10 +159,11 @@ public class Enemy : MonoBehaviour
         }
         else
         { 
-            _laserPos = transform.position;
+            _laserPos = transform.position - new Vector3(0, 0.3f, 0);
         }
 
-        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, _laserPos, Quaternion.identity);
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, _laserPos, Quaternion.identity, this.transform);
+       
 
         Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
@@ -157,6 +171,21 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < lasers.Length; i++)
         {
             lasers[i].SetEnemyLaser();
+
+            if (_isPickupPosReceived == true)
+            {
+                lasers[i].SetPickupPos(Vector3.Normalize(_pickupPos - transform.position));
+
+                if (_powerupDestroyed == false)
+                {
+                    lasers[i].PickupBehavior(true);
+                }
+                else
+                {
+                    lasers[i].PickupBehavior(false);
+                }
+            }
+
             if (_isBehind)
             {
                 lasers[i].SetEnemyBehind();
@@ -167,6 +196,26 @@ public class Enemy : MonoBehaviour
 
             }
         }
+    }
+
+
+    public void PowerupDestroyed(bool status)
+    {
+        _powerupDestroyed = status;
+
+    }
+
+    public void UpdatePickupPos(Vector3 pos)
+    {
+        _pickupPos = pos;
+        PosDataReceived(true);
+    }
+
+    public void PosDataReceived(bool status)
+    {
+        _isPickupPosReceived = status;
+
+        Debug.Log("Position received");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -217,8 +266,6 @@ public class Enemy : MonoBehaviour
     {
         _randomPosX = Random.Range(-9.0f, 9.0f);
     }
-
-
 
 
     IEnumerator RandomSpecialCoroutine()

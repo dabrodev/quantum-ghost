@@ -6,7 +6,7 @@ public class PowerUp : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.0f;
-    [SerializeField]
+    private float _step;
     private int _powerupID; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health 5=Slowdown
 
     // [SerializeField] 
@@ -15,10 +15,14 @@ public class PowerUp : MonoBehaviour
     private AudioSource _audioSource;
     private UIManager _uiManager;
 
+
+
     private void Start()
     {
         _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+
     }
 
     void Update()
@@ -29,6 +33,7 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
