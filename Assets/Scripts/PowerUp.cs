@@ -6,7 +6,6 @@ public class PowerUp : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.0f;
-    private float _step;
     private int _powerupID; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health 5=Slowdown
 
     // [SerializeField] 
@@ -15,14 +14,16 @@ public class PowerUp : MonoBehaviour
     private AudioSource _audioSource;
     private UIManager _uiManager;
 
-
+    private float _step;
+    private float _pickupCollectSpeed = 6.0f;
+    private Player _player;
 
     private void Start()
     {
         _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
-
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Update()
@@ -32,6 +33,13 @@ public class PowerUp : MonoBehaviour
         if (transform.position.y < -8.0f)
         {
             Destroy(this.gameObject);
+        }
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            _step = _pickupCollectSpeed * Time.deltaTime;
+
+            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _step);
         }
 
     }
