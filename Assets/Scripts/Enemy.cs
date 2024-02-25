@@ -27,13 +27,13 @@ public class Enemy : MonoBehaviour
     private bool _isPickupPosReceived = false;
     private bool _powerupDestroyed = false;
  
-
     private Vector3 _laserPos;
-
+    [SerializeField]
+    private bool _hardMode = true;
 
     void Start()
     {
-
+       
         _startXPosition = transform.position.x;
 
         direction = new Vector3(1f, -1f, 0);
@@ -85,8 +85,38 @@ public class Enemy : MonoBehaviour
             FireEnemyLaser();
         }
 
+        if (_hardMode == true)
+        {
+            AvoidMove();
+        }
+    }
 
+    void AvoidMove()
+    {
+        GameObject laser = GameObject.Find("Laser(Clone)");
 
+        if (laser != null) {
+
+            float distance = Vector3.Distance(transform.position, laser.transform.position);
+            Vector3 moveRight = Vector3.MoveTowards(transform.position, transform.position + new Vector3(2f, 1f, 0), 10f * Time.deltaTime);
+            Vector3 moveLeft = Vector3.MoveTowards(transform.position, transform.position + new Vector3(-2f, 1f, 0), 10f * Time.deltaTime);
+
+            if (distance < 1.9f)
+            {
+                if (transform.position.x < laser.transform.position.x)
+                {
+                    transform.position = moveLeft;
+                }
+                else if (transform.position.x > laser.transform.position.x)
+                {
+                    transform.position = moveRight;
+                }
+                else
+                {
+                    transform.position = moveLeft;
+                }
+            }
+        }
     }
 
     void BasicMovement() { 
@@ -142,11 +172,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-   /* internal void PowerupDestroyed()
-    {
-        throw new System.NotImplementedException();
-    }*/
-
     void FireEnemyLaser()
     {
 
@@ -193,11 +218,9 @@ public class Enemy : MonoBehaviour
             else
             {
                 lasers[i].UnsetEnemyBehind();
-
             }
         }
     }
-
 
     public void PowerupDestroyed(bool status)
     {
@@ -237,6 +260,7 @@ public class Enemy : MonoBehaviour
         {
 
             DestroyEnemy(other);
+            Destroy(other.gameObject);
 
             if (_player != null)
             {
@@ -252,9 +276,10 @@ public class Enemy : MonoBehaviour
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _speed = 0;
-            Destroy(collider.gameObject);
+            
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 2.0f);
+
         }
         else
         {

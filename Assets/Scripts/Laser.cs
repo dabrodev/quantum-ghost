@@ -13,6 +13,11 @@ public class Laser : MonoBehaviour
     private Vector3  _actualPowerupPos;
     private Rigidbody2D _laserRigidbody;
     private GameObject _enemy;
+    [SerializeField]
+    private GameObject _enemyPrefab;
+
+    private bool _fireHomingMissile = false;
+    private Vector3 _homingMissileTarget = new Vector3(0, 0, 0);
  
     private void Start()
     {
@@ -29,11 +34,20 @@ public class Laser : MonoBehaviour
         {
             MoveDown();
         }
+
     }
 
     void MoveUp()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
+        if (_fireHomingMissile == true)
+        {
+            HomingMissileMove();
+        }
+        else
+        {
+            transform.Translate(Vector3.up * _speed * Time.deltaTime);
+            
+        }
 
         if (transform.position.y > 8.0f)
         {
@@ -73,6 +87,23 @@ public class Laser : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
+    }
+
+
+    public void FireHomeMissle(Vector3 pos)
+    {
+        _homingMissileTarget = pos;
+       
+    }
+
+    public void SetFireHomeMissle() {
+        _fireHomingMissile = true;
+
+        Debug.Log("Called!!!!!!!!!!");
+    }
+
+    public void HomingMissileMove() {
+        transform.position = Vector3.MoveTowards(transform.position, _homingMissileTarget, 30f * Time.deltaTime);
     }
 
     public void SetPickupPos(Vector3 powPos)
@@ -120,7 +151,7 @@ public class Laser : MonoBehaviour
         {
             Destroy(other.gameObject);
             //Destroy(this.gameObject);
-            _enemy.GetComponent<Enemy>().PowerupDestroyed(true);
+           // _enemy.GetComponent<Enemy>().PowerupDestroyed(true);
             Debug.Log("PowerUp destroyed!!!!!!!!!!!!");
         }
     }

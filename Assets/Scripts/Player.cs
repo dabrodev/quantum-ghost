@@ -56,6 +56,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _thrusterVolume= 1f;
     private bool _isSlowDown = false;
+    private bool _isHomingMissile = false;
+
+    
 
     void Start()
     {
@@ -89,11 +92,13 @@ public class Player : MonoBehaviour
         {
             _audioSource.clip = _laserSoundClip;
         }
+
+
+      
     }
 
     void Update()
     {
-       
 
         if ( Time.time > _nextThruster && _thrusterVolume < 1.0f && !Input.GetKey(KeyCode.LeftShift))
         {
@@ -130,6 +135,38 @@ public class Player : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0 && _isSlowDown == false)
         {
             _speed = 3.5f;
+        }
+
+        HomingMissile();
+    }
+
+    void HomingMissile()
+    {
+        GameObject enemiesContainer = _spawnManager.transform.GetChild(0).gameObject;
+
+        Enemy[] enemies = enemiesContainer.GetComponentsInChildren<Enemy>();
+
+
+        float lowestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < enemies.Length; i++) {
+
+
+            float dist = Vector3.Distance(transform.position, enemies[i].transform.position);
+
+            if (dist < lowestDistance) {
+                lowestDistance = dist;
+                Vector3 nearestPos = enemies[i].transform.position;
+              
+                if (Input.GetKeyDown(KeyCode.H ) && _isHomingMissile == true)
+                {
+                    FireLaser();
+                    GameObject laserClone = GameObject.Find("Laser(Clone)");
+                    
+                    laserClone.GetComponent<Laser>().FireHomeMissile(nearestPos);
+                    laserClone.GetComponent<Laser>().SetFireHomeMissile();
+                }
+            }
         }
     }
 
@@ -184,7 +221,6 @@ public class Player : MonoBehaviour
         }
 
         _uiManager.UpdateAmmo(_ammoCount);
-
 
         _audioSource.Play();
     }
@@ -278,11 +314,17 @@ public class Player : MonoBehaviour
     {
         _isSlowDown = true;
         _speed = 1;
+        StartCoroutine(SlowdownCoroutine());
+    }
+
+    public void HomingMissileActive()
+    {
+        _isHomingMissile = true;
+        StartCoroutine(HomingMissileDownRoutine());
     }
 
     public void HealthCollected()
     {
-
 
         if (_lives < 3)
         {
@@ -360,6 +402,13 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         _isSlowDown = false;
+    }
+
+
+    IEnumerator HomingMissileDownRoutine()
+    {
+        yield return new WaitForSeconds(10);
+        _isHomingMissile = false;
     }
 
     public void AddScore(int points)

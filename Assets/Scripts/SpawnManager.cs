@@ -56,7 +56,7 @@ public class SpawnManager : MonoBehaviour
     private int GetWeightedRandomPowerup()
     {
         // Define weights for each powerup; higher numbers mean higher chance of spawning
-        int[] weights = new int[] { 10, 10, 10, 50, 5, 15 }; // Example weights: Ammo (3) is more common, Health (4) is rare
+        int[] weights = new int[] { 10, 10, 10, 50, 5, 15, 30}; // Example weights: Ammo (3) is more common, Health (4) is rare
         int totalWeight = 0;
 
         // Calculate the sum of all weights
@@ -113,6 +113,7 @@ public class SpawnManager : MonoBehaviour
             {
                 newEnemy.transform.GetChild(0).gameObject.SetActive(true);
             }
+            
             _count++;
 
             yield return new WaitForSeconds(5);

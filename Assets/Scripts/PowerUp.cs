@@ -6,7 +6,8 @@ public class PowerUp : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.0f;
-    private int _powerupID; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health 5=Slowdown
+    [SerializeField]
+    private int _powerupID; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health  5= MultiDirShot 6=Slowdown 7=HomingMissile
 
     // [SerializeField] 
     // private AudioClip _clip; // Alternative solution
@@ -24,6 +25,12 @@ public class PowerUp : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         _player = GameObject.Find("Player").GetComponent<Player>();
+
+
+        if (_player == null) {
+
+            Debug.LogError("Player is NULL");
+        }
     }
 
     void Update()
@@ -76,6 +83,9 @@ public class PowerUp : MonoBehaviour
                     break;
                 case 6:
                     player.SlowdownActive();
+                    break;
+                case 7:
+                    player.HomingMissileActive();
                     break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
