@@ -1615,6 +1615,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2523971775071676340, guid: 8b95e107a562a4c0eb68ea7421298988,
     type: 3}
+  _redEnemyPrefab: {fileID: 8664561730953586897, guid: 35e2104c5c12147978156cdf7f4260ae,
+    type: 3}
   _enemyContainer: {fileID: 564063779}
   _powerups:
   - {fileID: 1974168030254007191, guid: 6dcb629cf3bde4cde9e6ba6fd1964069, type: 3}
@@ -1623,6 +1625,7 @@ MonoBehaviour:
   - {fileID: 4899563031352200785, guid: 9e154eaf0e07a49739bf858442e89a9a, type: 3}
   - {fileID: 7215040607179896666, guid: c7b8048b12b1c4aa0bb5cdb515bdd27f, type: 3}
   - {fileID: 6781393699357454068, guid: 42afc74e4dce54cbf82a565c53b62019, type: 3}
+  - {fileID: 5541536815001409182, guid: d4fda41cfe06641d08ba6802242ec9d8, type: 3}
   _rarePowerups:
   - {fileID: 1444603692977291460, guid: 1ec43a966f8634f8d919f146a0615c3e, type: 3}
 --- !u!4 &1358050589
@@ -2134,7 +2137,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639322322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -1.48, z: 0}
+  m_LocalPosition: {x: -0.04, y: -1.6, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1221178194}

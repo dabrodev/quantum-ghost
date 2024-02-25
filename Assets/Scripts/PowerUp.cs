@@ -7,7 +7,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
-    private int _powerupID; // =Triple-Shot 1=Speed 2=Shields 3=Ammo 4=Health
+    private int _powerupID; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health  5= MultiDirShot 6=Slowdown 7=HomingMissile
 
     // [SerializeField] 
     // private AudioClip _clip; // Alternative solution
@@ -15,10 +15,22 @@ public class PowerUp : MonoBehaviour
     private AudioSource _audioSource;
     private UIManager _uiManager;
 
+    private float _step;
+    private float _pickupCollectSpeed = 6.0f;
+    private Player _player;
+
     private void Start()
     {
         _audioSource = GameObject.Find("PowerupSound").GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        _player = GameObject.Find("Player").GetComponent<Player>();
+
+
+        if (_player == null) {
+
+            Debug.LogError("Player is NULL");
+        }
     }
 
     void Update()
@@ -29,6 +41,14 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            _step = _pickupCollectSpeed * Time.deltaTime;
+
+            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _step);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -63,6 +83,9 @@ public class PowerUp : MonoBehaviour
                     break;
                 case 6:
                     player.SlowdownActive();
+                    break;
+                case 7:
+                    player.HomingMissileActive();
                     break;
                 default:
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);

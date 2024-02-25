@@ -9,6 +9,8 @@ TagManager:
   - Foreground
   - Background
   - Shield
+  - LaserBeam
+  - Powerup
   layers:
   - Default
   - TransparentFX
