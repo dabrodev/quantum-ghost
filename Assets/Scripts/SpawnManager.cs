@@ -156,6 +156,13 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+
+    private IEnumerator WelcomeBossRoutine()
+    {
+        yield return new WaitForSeconds(10f);
+        Instantiate(_bossPrefab, new Vector3(0, 10f, 0), Quaternion.identity);
+    }
+
     public void onPlayerDeath()
     {
         _stopSpawning = true;
@@ -164,8 +171,11 @@ public class SpawnManager : MonoBehaviour
     public void WelcomeBoss()
     {
         _stopSpawning = true;
-        Instantiate(_bossPrefab, new Vector3(0, 10f, 0), Quaternion.identity);
+        StartCoroutine(WelcomeBossRoutine());
     }
+
+
+
     
    /* public void FreeAreaCheck() {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

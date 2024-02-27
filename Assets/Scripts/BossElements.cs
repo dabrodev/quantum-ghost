@@ -12,6 +12,7 @@ public class BossElements : MonoBehaviour
     private GameObject _laser;
     private Animator _anim;
     private AudioSource _audioSource;
+    private UIManager _uiManager;
 
     [SerializeField]
     private float _fireRate = 3f;
@@ -19,7 +20,8 @@ public class BossElements : MonoBehaviour
     private float _fireRateYellow = 12f;
     private float _nextFire = 0;
     private bool _startFiring = false;
-    int[] strengths = new int[] { 3, 3, 3, 5, 5, 6, 6 };
+    int[] strengths = new int[] { 3, 3, 3, 5, 5, 7, 7};
+ 
 
     void Start()
     {
@@ -27,6 +29,7 @@ public class BossElements : MonoBehaviour
 
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -121,8 +124,17 @@ public class BossElements : MonoBehaviour
             if (Time.time > _nextFire && _startFiring == true)
             {
                 _nextFire = Time.time + _fireRateRed;
+
                 GameObject enemyLaser = Instantiate(_laser, transform.position - new Vector3(0, 1.5f, 0), Quaternion.identity);
-                enemyLaser.GetComponent<Laser>().SetEnemyLaser();
+                if (enemyLaser != null)
+                {
+                    enemyLaser.GetComponent<Laser>().SetEnemyLaser();
+                }
+                else
+                {
+                    Debug.LogError("Enemy Laser is NULL");
+                }
+                
                 if (GameObject.Find("Player").transform.position.x > 9f)
                 {
                     enemyLaser.GetComponent<Laser>().SetYellowEnemy(true);
@@ -137,20 +149,26 @@ public class BossElements : MonoBehaviour
 
     void DamageBoss()
     {
+
         for (int i=0; i < strengths.Length; i++)
         {
-            if (_bossID == i+1 )
+            if (_bossID == i + 1)
             {
-                int alive = --strengths[i];
-                Debug.Log("Boss alive: " + alive);
+                --strengths[i];
+
+                int alive = strengths[i];
+                _uiManager.UpdateBossScore();
+               
                 if (alive == 0)
                 {
+                    Destroy(this.gameObject.GetComponent<BoxCollider2D>());
                     Destroy(this.gameObject, 2f);
                     _anim.SetTrigger("OnEnemyDeath");
                     _audioSource.Play();
                 }
-            }
+            }       
         }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -160,6 +178,8 @@ public class BossElements : MonoBehaviour
         {
 
             DamageBoss();
+           
+
             Destroy(other.gameObject);
         }
     }
@@ -184,8 +204,5 @@ public class BossElements : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(5f);
         transform.GetChild(0).gameObject.SetActive(false);
-       
-      
-
     }
 }

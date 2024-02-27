@@ -17,12 +17,17 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _gameOverText;
     [SerializeField]
+    private Text _winnerText;
+    [SerializeField]
     private Text _resetText;
     private bool _display = false;
     [SerializeField]
     private Scrollbar _shieldStrength;
     [SerializeField]
     private Scrollbar _thrusterVolume;
+    [SerializeField]
+    private Scrollbar _bossStrength;
+    private float _bossScore = 100;
     
     void Start()
     {
@@ -59,7 +64,13 @@ public class UIManager : MonoBehaviour
 
     public void GameOverShow()
     {
-        StartCoroutine(GameOverFlickerCoroutine());
+        StartCoroutine(FlickerCoroutine(_gameOverText));
+        _resetText.gameObject.SetActive(true);
+    }
+
+    public void WinnerShow()
+    {
+        StartCoroutine(FlickerCoroutine(_winnerText));
         _resetText.gameObject.SetActive(true);
     }
 
@@ -95,18 +106,58 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateBossScore()
+    {
+        _bossScore -= 3;
+        _bossStrength.size = _bossScore/100;
 
-    IEnumerator GameOverFlickerCoroutine()
+        Debug.Log("Boss Scrollbar Size: " + _bossStrength.size);
+        if (_bossStrength.size <= 0.01)
+        {
+            _bossStrength.gameObject.SetActive(false);
+            WinnerShow();
+        }
+    }
+
+    public void BossScore()
+    {
+        _bossStrength.gameObject.SetActive(true);
+        StartCoroutine(BossAnnouncement());
+    }
+
+    IEnumerator BossAnnouncement()
+    {
+        int loop = 40;
+        while (loop > 0)
+        {
+
+            if (_display)
+            {
+                _bossStrength.gameObject.SetActive(true);
+            }
+            else
+            {
+                _bossStrength.gameObject.SetActive(false);
+            }
+
+            yield return new WaitForSeconds(0.3f);
+            _display = !_display;
+
+            loop--;
+        }
+    }
+
+    IEnumerator FlickerCoroutine( Text text)
     {
         while(true)
         {
             if (_display)
             {
-                _gameOverText.gameObject.SetActive(true);
+                text.gameObject.SetActive(true);
             }
             else
             {
-                _gameOverText.gameObject.SetActive(false);
+                text.gameObject.SetActive(false);
             }
 
             yield return new WaitForSeconds(0.2f);
@@ -124,7 +175,6 @@ public class UIManager : MonoBehaviour
             */
 
         }
-
 
     }
 
