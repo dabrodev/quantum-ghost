@@ -11,6 +11,7 @@ TagManager:
   - Shield
   - LaserBeam
   - Powerup
+  - Boss
   layers:
   - Default
   - TransparentFX

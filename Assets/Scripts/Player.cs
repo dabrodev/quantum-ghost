@@ -57,6 +57,9 @@ public class Player : MonoBehaviour
     private float _thrusterVolume= 1f;
     private bool _isSlowDown = false;
     private bool _isHomingMissile = false;
+    [SerializeField]
+    private int _pointsBossIsComing = 60;
+    private bool _boss = true;
 
     
 
@@ -418,6 +421,11 @@ public class Player : MonoBehaviour
         if (_uiManager != null)
         {
             _uiManager.UpdateScore(_score);
+        }
+
+        if (_score >= _pointsBossIsComing && _boss == true) {
+            _spawnManager.WelcomeBoss();
+            _boss = false;
         }
     }
 }
