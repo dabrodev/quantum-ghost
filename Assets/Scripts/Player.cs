@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _nextFire = 0.0f;
     [SerializeField]
-    private int _ammoCount = 15;
+    private int _ammoCount = 200;
     [SerializeField]
     private int _lives = 3;
 
@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
                 lowestDistance = dist;
                 Vector3 nearestPos = enemies[i].transform.position;
               
-                if (Input.GetKeyDown(KeyCode.H ) && _isHomingMissile == true)
+                if (Input.GetKeyDown(KeyCode.X ) && _isHomingMissile == true)
                 {
                     FireLaser();
                     GameObject laserClone = GameObject.Find("Laser(Clone)");
@@ -231,7 +231,7 @@ public class Player : MonoBehaviour
 
     public void RefillAmmo()
     {
-        _ammoCount = 15;
+        _ammoCount += 15;
         _uiManager.UpdateAmmo(_ammoCount);
     }
 
@@ -282,7 +282,6 @@ public class Player : MonoBehaviour
             _leftEngineFire.SetActive(true);
         }
     }
-
 
     public void TripleShotActive()
     {
@@ -349,7 +348,6 @@ public class Player : MonoBehaviour
             _rightEngineFire.SetActive(false);
         }
     }
-
 
     IEnumerator SpaceShaker()
     {
@@ -425,6 +423,7 @@ public class Player : MonoBehaviour
 
         if (_score >= _pointsBossIsComing && _boss == true) {
             _spawnManager.WelcomeBoss();
+            _uiManager.BossScore();
             _boss = false;
         }
     }
