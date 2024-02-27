@@ -10,18 +10,22 @@ public class Laser : MonoBehaviour
     private bool _isEnemyLaser = false;
     private bool _isEnemyBehind = false;
     private bool _pickupBehavior = false;
-    private Vector3  _actualPowerupPos;
+    private bool _isYellowEnemy = false;
+    private Vector3 _actualPowerupPos;
     private Rigidbody2D _laserRigidbody;
     private GameObject _enemy;
     [SerializeField]
     private GameObject _enemyPrefab;
+    private GameObject _yellowEnemy;
 
     private bool _fireHomingMissile = false;
     private Vector3 _homingMissileTarget = new Vector3(0, 0, 0);
- 
+
     private void Start()
     {
         _laserRigidbody = GetComponent<Rigidbody2D>();
+       
+    
     }
 
     void Update()
@@ -35,6 +39,11 @@ public class Laser : MonoBehaviour
             MoveDown();
         }
 
+        if (_isYellowEnemy == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, GameObject.Find("Player").transform.position, 10f * Time.deltaTime);
+            Destroy(this.gameObject, 1f);
+        }
     }
 
     void MoveUp()
@@ -46,7 +55,7 @@ public class Laser : MonoBehaviour
         else
         {
             transform.Translate(Vector3.up * _speed * Time.deltaTime);
-            
+
         }
 
         if (transform.position.y > 8.0f)
@@ -64,16 +73,16 @@ public class Laser : MonoBehaviour
 
     void MoveDown()
     {
-        _enemy = gameObject.transform.parent.gameObject.transform.parent.gameObject;
+       // _enemy = gameObject.transform.parent.gameObject.transform.parent.gameObject;
 
         if (_pickupBehavior == false)
         {
-            
+
             transform.Translate(Vector3.down * _speed * Time.deltaTime);
         }
         else if (_pickupBehavior == true)
         {
-            FirePowerup(_actualPowerupPos);  
+            FirePowerup(_actualPowerupPos);
         }
 
         if (transform.position.y < -10.0f)
@@ -90,19 +99,21 @@ public class Laser : MonoBehaviour
     }
 
 
-    public void FireHomeMissle(Vector3 pos)
+    public void FireHomeMissile(Vector3 pos)
     {
         _homingMissileTarget = pos;
-       
+
     }
 
-    public void SetFireHomeMissle() {
+    public void SetFireHomeMissile()
+    {
         _fireHomingMissile = true;
 
         Debug.Log("Called!!!!!!!!!!");
     }
 
-    public void HomingMissileMove() {
+    public void HomingMissileMove()
+    {
         transform.position = Vector3.MoveTowards(transform.position, _homingMissileTarget, 30f * Time.deltaTime);
     }
 
@@ -112,7 +123,8 @@ public class Laser : MonoBehaviour
         Debug.Log("Set pickup pos from Laser script");
     }
 
-    public void PickupBehavior(bool status) {
+    public void PickupBehavior(bool status)
+    {
         _pickupBehavior = status;
     }
 
@@ -124,6 +136,10 @@ public class Laser : MonoBehaviour
     public void SetEnemyLaser()
     {
         _isEnemyLaser = true;
+    }
+
+    public void SetYellowEnemy(bool status) {
+        _isYellowEnemy = status;
     }
 
     public void SetEnemyBehind()
@@ -151,10 +167,8 @@ public class Laser : MonoBehaviour
         {
             Destroy(other.gameObject);
             //Destroy(this.gameObject);
-           // _enemy.GetComponent<Enemy>().PowerupDestroyed(true);
+            // _enemy.GetComponent<Enemy>().PowerupDestroyed(true);
             Debug.Log("PowerUp destroyed!!!!!!!!!!!!");
         }
     }
-
-
 }

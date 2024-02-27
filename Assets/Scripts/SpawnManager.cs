@@ -10,6 +10,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _redEnemyPrefab;
     [SerializeField]
+    private GameObject _bossPrefab;
+    [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups; // 0=Tripleshot 1=Speed 2=Shields 3=Ammo 4=Health 5=Slowdown
@@ -19,7 +21,9 @@ public class SpawnManager : MonoBehaviour
     private Vector3 _randomPos;
    
     private int _count = 1;
-   
+
+
+
 
     public void StartSpawning()
     {
@@ -116,8 +120,7 @@ public class SpawnManager : MonoBehaviour
             
             _count++;
 
-            yield return new WaitForSeconds(5);
-            
+            yield return new WaitForSeconds(5);   
         }
     }  
 
@@ -157,4 +160,20 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
+
+    public void WelcomeBoss()
+    {
+        _stopSpawning = true;
+        Instantiate(_bossPrefab, new Vector3(0, 10f, 0), Quaternion.identity);
+    }
+    
+   /* public void FreeAreaCheck() {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (enemies.Length == 0)
+        {
+            WelcomeBoss();
+            _stopSpawning = true;
+        }
+    }*/
 }
