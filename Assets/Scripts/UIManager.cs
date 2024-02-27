@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "Score: " + 0;
-        _ammoCountText.text = "Ammo: " + 15;
+        _ammoCountText.text = "Ammo: " + 200;
         _gameOverText.gameObject.SetActive(false);
     }
 

@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _nextFire = 0.0f;
     [SerializeField]
-    private int _ammoCount = 100;
+    private int _ammoCount = 200;
     [SerializeField]
     private int _lives = 3;
 
