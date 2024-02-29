@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     private Text _winnerText;
     [SerializeField]
     private Text _resetText;
+    [SerializeField]
+    private Text _mainMenuText;
     private bool _display = false;
     [SerializeField]
     private Scrollbar _shieldStrength;
@@ -74,6 +76,7 @@ public class UIManager : MonoBehaviour
     {
         StartCoroutine(FlickerCoroutine(_winnerText));
         _resetText.gameObject.SetActive(true);
+        _mainMenuText.gameObject.SetActive(true);
         _gameManager.Winner();
     }
 
@@ -155,11 +158,11 @@ public class UIManager : MonoBehaviour
         while(true)
         {
 
-            _gameOverText.gameObject.SetActive(true);
+            text.gameObject.SetActive(true);
 
             yield return new WaitForSeconds(0.2f);
 
-            _gameOverText.gameObject.SetActive(false);
+            text.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(0.2f);
 
