@@ -61,8 +61,6 @@ public class Player : MonoBehaviour
     private int _pointsBossIsComing = 60;
     private bool _boss = true;
 
-    
-
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -95,9 +93,6 @@ public class Player : MonoBehaviour
         {
             _audioSource.clip = _laserSoundClip;
         }
-
-
-      
     }
 
     void Update()
@@ -228,13 +223,11 @@ public class Player : MonoBehaviour
         _audioSource.Play();
     }
 
-
     public void RefillAmmo()
     {
         _ammoCount += 15;
         _uiManager.UpdateAmmo(_ammoCount);
     }
-
 
     public void Damage()
     {
@@ -404,7 +397,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
         _isSlowDown = false;
     }
-
 
     IEnumerator HomingMissileDownRoutine()
     {

@@ -7,14 +7,14 @@ public class GameManager : MonoBehaviour
 {
 
     private bool _isDead = false;
+    private bool _isWinner = false;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && _isDead)
+        if (Input.GetKeyDown(KeyCode.R) && (_isDead || _isWinner))
         {
             RestartLevel();
         }
-
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -24,6 +24,11 @@ public class GameManager : MonoBehaviour
             Application.Quit();
             #endif
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            BackToMainMenu();
+        }
     }
 
     public void GameOver()
@@ -31,8 +36,19 @@ public class GameManager : MonoBehaviour
         _isDead = true;
     }
 
+    public void Winner()
+    {
+        _isWinner = true;
+    }
+
     private void RestartLevel()
     {
         SceneManager.LoadScene(1);
+    }
+
+
+    private void BackToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

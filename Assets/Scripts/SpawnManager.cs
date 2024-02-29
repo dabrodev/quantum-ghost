@@ -22,12 +22,9 @@ public class SpawnManager : MonoBehaviour
    
     private int _count = 1;
 
-
-
-
     public void StartSpawning()
     {
-        _randomPos = new Vector3(Random.Range(-9.0f, 9.0f), 8.0f, 0);
+        _randomPos = new Vector3(0, 8.0f, 0);
 
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
@@ -44,14 +41,11 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(4.0f);
 
             float randomTime = Random.Range(3.0f, 7.0f);
-
-
+            _randomPos.x = Random.Range(-9.0f, 9.0f);
 
             //int randomPowerup = Random.Range(0, _powerups.Length);
             int randomPowerup = GetWeightedRandomPowerup();
         
-      
-
             GameObject newPowerup = Instantiate(_powerups[randomPowerup], _randomPos, Quaternion.identity);
             yield return new WaitForSeconds(randomTime);
         }
@@ -86,7 +80,6 @@ public class SpawnManager : MonoBehaviour
         return 0; // Default to the first power-up as a fallback
     }
 
-
     private IEnumerator SpawnRarePowerupRoutine()
     {
         while (_stopSpawning == false)
@@ -95,7 +88,8 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(10.0f);
             float randomRareTime = Random.Range(9.0f, 14f);
             int randomPowerup = Random.Range(0, _rarePowerups.Length);
-          
+            _randomPos.x = Random.Range(-9.0f, 9.0f);
+
             GameObject newPowerup = Instantiate(_rarePowerups[randomPowerup], _randomPos, Quaternion.identity);
             yield return new WaitForSeconds(randomRareTime);
         }
@@ -108,9 +102,9 @@ public class SpawnManager : MonoBehaviour
 
         while (_stopSpawning == false)
         {
-            
+            _randomPos.x = Random.Range(-9.0f, 9.0f);
+
             GameObject newEnemy = Instantiate(_enemyPrefab, _randomPos, Quaternion.identity);
-            
             newEnemy.transform.parent = _enemyContainer.transform;
 
             if (_count % 3 == 0)
@@ -132,6 +126,7 @@ public class SpawnManager : MonoBehaviour
         {
 
             float randomRareTime = Random.Range(9.0f, 14f);
+            _randomPos.x = Random.Range(-9.0f, 9.0f);
 
             for (int i = 0; i < 5; i++)
             {
@@ -149,13 +144,13 @@ public class SpawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(6.0f);
             float randomRareTime = Random.Range(10f, 15f);
+            _randomPos.x = Random.Range(-9.0f, 9.0f);
 
             GameObject newRedEnemy = Instantiate(_redEnemyPrefab, _randomPos, Quaternion.identity);
             newRedEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(randomRareTime);
         }
     }
-
 
     private IEnumerator WelcomeBossRoutine()
     {
@@ -174,9 +169,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(WelcomeBossRoutine());
     }
 
-
-
-    
    /* public void FreeAreaCheck() {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 

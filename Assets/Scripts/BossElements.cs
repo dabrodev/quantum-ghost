@@ -76,7 +76,6 @@ public class BossElements : MonoBehaviour
 
     void FireLaser()
     {
-        
 
         if (_bossID == 1 || _bossID == 2 || _bossID == 3)
         {
@@ -119,7 +118,6 @@ public class BossElements : MonoBehaviour
         }
 
         if (_bossID == 5)
-
         {
             if (Time.time > _nextFire && _startFiring == true)
             {
@@ -162,13 +160,12 @@ public class BossElements : MonoBehaviour
                 if (alive == 0)
                 {
                     Destroy(this.gameObject.GetComponent<BoxCollider2D>());
-                    Destroy(this.gameObject, 2f);
                     _anim.SetTrigger("OnEnemyDeath");
                     _audioSource.Play();
+                    Destroy(this.gameObject, 2f);
                 }
             }       
         }
-        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -176,10 +173,8 @@ public class BossElements : MonoBehaviour
 
         if (other.tag == "Laser")
         {
-
             DamageBoss();
            
-
             Destroy(other.gameObject);
         }
     }
