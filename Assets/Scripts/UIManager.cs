@@ -28,12 +28,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Scrollbar _bossStrength;
     private float _bossScore = 100;
+    private GameManager _gameManager;
     
     void Start()
     {
         _scoreText.text = "Score: " + 0;
         _ammoCountText.text = "Ammo: " + 200;
         _gameOverText.gameObject.SetActive(false);
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void UpdateScore(int playerScore)
@@ -72,6 +74,7 @@ public class UIManager : MonoBehaviour
     {
         StartCoroutine(FlickerCoroutine(_winnerText));
         _resetText.gameObject.SetActive(true);
+        _gameManager.Winner();
     }
 
     public void ShowShieldStrength()
@@ -151,7 +154,19 @@ public class UIManager : MonoBehaviour
     {
         while(true)
         {
-            if (_display)
+
+            _gameOverText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(0.2f);
+
+            _gameOverText.gameObject.SetActive(false);
+
+            yield return new WaitForSeconds(0.2f);
+
+
+            /* alternative solution */
+
+            /*if (_display)
             {
                 text.gameObject.SetActive(true);
             }
@@ -162,20 +177,8 @@ public class UIManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
 
-            _display = !_display;
-
-            /* Below the alternative solution shown in video, 
-               but it doesn't work for me
-
-            _gameOverText.gameObject.SetActive(true);  
-
-            yield return new WaitForSeconds(0.2f);
-
-            _gameOverText.gameObject.SetActive(false);
-            */
-
+            _display = !_display;*/
         }
-
     }
 
 }

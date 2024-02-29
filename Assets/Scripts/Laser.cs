@@ -23,9 +23,8 @@ public class Laser : MonoBehaviour
 
     private void Start()
     {
+
         _laserRigidbody = GetComponent<Rigidbody2D>();
-       
-    
     }
 
     void Update()
@@ -102,7 +101,6 @@ public class Laser : MonoBehaviour
     public void FireHomeMissile(Vector3 pos)
     {
         _homingMissileTarget = pos;
-
     }
 
     public void SetFireHomeMissile()
@@ -166,8 +164,8 @@ public class Laser : MonoBehaviour
         else if (other.tag == "Powerup")
         {
             Destroy(other.gameObject);
-            //Destroy(this.gameObject);
             // _enemy.GetComponent<Enemy>().PowerupDestroyed(true);
+            //Destroy(this.gameObject);
             Debug.Log("PowerUp destroyed!!!!!!!!!!!!");
         }
     }

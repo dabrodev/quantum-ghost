@@ -57,7 +57,7 @@ public class PowerUp : MonoBehaviour
         {
             // AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f); // Alternative solution
             _audioSource.Play();
-            Destroy(this.gameObject);
+            
             Player player = other.transform.GetComponent<Player>();
 
             switch(_powerupID)
@@ -91,6 +91,8 @@ public class PowerUp : MonoBehaviour
                     Debug.LogWarning("Unknown PowerUp ID: " + _powerupID);
                     break;
             }
+
+            Destroy(this.gameObject);
         }
     }
 }
