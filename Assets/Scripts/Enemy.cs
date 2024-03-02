@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private Animator _anim;
     private float _fireRate;
     private float _nextFire = 0;
+    private bool _stopFiring = false;
 
     [SerializeField]
     private GameObject _enemyLaserPrefab;
@@ -187,37 +188,43 @@ public class Enemy : MonoBehaviour
             _laserPos = transform.position - new Vector3(0, 0.3f, 0);
         }
 
-        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, _laserPos, Quaternion.identity, this.transform);
-       
-
-        Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-
-        for (int i = 0; i < lasers.Length; i++)
+        if (_stopFiring == false)
         {
-            lasers[i].SetEnemyLaser();
 
-            if (_isPickupPosReceived == true)
+            GameObject enemyLaser = Instantiate(_enemyLaserPrefab, _laserPos, Quaternion.identity, this.transform);
+
+
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+
+            for (int i = 0; i < lasers.Length; i++)
             {
-                lasers[i].SetPickupPos(Vector3.Normalize(_pickupPos - transform.position));
+                lasers[i].SetEnemyLaser();
 
-                if (_powerupDestroyed == false)
+                if (_isPickupPosReceived == true)
                 {
-                    lasers[i].PickupBehavior(true);
+                    lasers[i].SetPickupPos(Vector3.Normalize(_pickupPos - transform.position));
+
+                    if (_powerupDestroyed == false)
+                    {
+                        lasers[i].PickupBehavior(true);
+                    }
+                    else
+                    {
+                        lasers[i].PickupBehavior(false);
+                    }
+                }
+
+
+
+                if (_isBehind)
+                {
+                    lasers[i].SetEnemyBehind();
                 }
                 else
                 {
-                    lasers[i].PickupBehavior(false);
+                    lasers[i].UnsetEnemyBehind();
                 }
-            }
-
-            if (_isBehind)
-            {
-                lasers[i].SetEnemyBehind();
-            }
-            else
-            {
-                lasers[i].UnsetEnemyBehind();
             }
         }
     }
@@ -247,25 +254,25 @@ public class Enemy : MonoBehaviour
         {
             Player player = other.transform.GetComponent<Player>();
 
-       
-            DestroyEnemy(other);
-
             if (player != null)
             {
                 player.Damage();
             }
+            DestroyEnemy(other);
         }
 
         if (other.tag == "Laser")
         {
 
-            DestroyEnemy(other);
+           
             Destroy(other.gameObject);
 
             if (_player != null)
             {
                 _player.AddScore(10);
             }
+
+            DestroyEnemy(other);
         }
     }
 
@@ -273,6 +280,8 @@ public class Enemy : MonoBehaviour
     {
         if (_enemyShield.activeSelf == false)
         {
+            _stopFiring = true;
+            Debug.Log("Emeny STOP Firing!!!!");
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _speed = 0;

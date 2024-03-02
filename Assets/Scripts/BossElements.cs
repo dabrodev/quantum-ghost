@@ -159,6 +159,7 @@ public class BossElements : MonoBehaviour
                
                 if (alive == 0)
                 {
+                    _startFiring = false;
                     Destroy(this.gameObject.GetComponent<BoxCollider2D>());
                     _anim.SetTrigger("OnEnemyDeath");
                     _audioSource.Play();
