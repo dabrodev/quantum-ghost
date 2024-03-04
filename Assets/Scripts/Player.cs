@@ -259,6 +259,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                _uiManager.UpdateLives(0);
                 _spawnManager.onPlayerDeath();
             }
            
