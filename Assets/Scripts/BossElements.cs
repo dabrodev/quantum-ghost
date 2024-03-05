@@ -7,13 +7,11 @@ public class BossElements : MonoBehaviour
     [SerializeField]
     private int _bossID;
     private bool _greyEnemyMove = false;
-
     [SerializeField]
     private GameObject _laser;
     private Animator _anim;
     private AudioSource _audioSource;
     private UIManager _uiManager;
-
     [SerializeField]
     private float _fireRate = 3f;
     private float _fireRateRed = 2f;
@@ -30,6 +28,21 @@ public class BossElements : MonoBehaviour
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_anim == null)
+        {
+            Debug.LogError("The Animator is NULL");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("The Audiosource is NULL");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is NULL");
+        }
     }
 
     // Update is called once per frame
@@ -44,7 +57,6 @@ public class BossElements : MonoBehaviour
 
     void EnemiesMovement()
     {
-    
         switch (_bossID)
         {
             case 1:
@@ -76,7 +88,6 @@ public class BossElements : MonoBehaviour
 
     void FireLaser()
     {
-
         if (_bossID == 1 || _bossID == 2 || _bossID == 3)
         {
             if (Time.time > _nextFire && _startFiring == true)
@@ -98,7 +109,6 @@ public class BossElements : MonoBehaviour
         }
 
         if (_bossID == 4)
-
         {
             if (Time.time > _nextFire && _startFiring == true)
             {
@@ -147,7 +157,6 @@ public class BossElements : MonoBehaviour
 
     void DamageBoss()
     {
-
         for (int i=0; i < strengths.Length; i++)
         {
             if (_bossID == i + 1)
@@ -171,7 +180,6 @@ public class BossElements : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
         if (other.tag == "Laser")
         {
             DamageBoss();

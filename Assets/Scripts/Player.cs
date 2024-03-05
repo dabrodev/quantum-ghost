@@ -67,7 +67,6 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
         _audioSource = GetComponent<AudioSource>();
 
         if (_spawnManager == null)
@@ -97,7 +96,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-
         if ( Time.time > _nextThruster && _thrusterVolume < 1.0f && !Input.GetKey(KeyCode.LeftShift))
         {
             _nextThruster = Time.time + _thrusterRate;
@@ -105,7 +103,6 @@ public class Player : MonoBehaviour
             _thrusterVolume += 0.05f;
             _uiManager.UpdateThruster(_thrusterVolume);
         }
-
 
         PlayerMovement();
 
@@ -127,7 +124,6 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && _thrusterVolume > 0 && _isSlowDown == false)
         {
             _speed *= 2;
-            
         }
 
         if (Input.GetKeyUp(KeyCode.LeftShift) || _thrusterVolume < 0 && _isSlowDown == false)
